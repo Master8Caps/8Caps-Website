@@ -11,7 +11,12 @@ export default async function NewSitePage() {
   return (
     <div>
       <h1 className="px-8 pt-8 text-2xl font-bold text-ink">Add a website</h1>
-      <SiteForm categories={categories} allTags={tags} onSubmit={createSite} />
+      <SiteForm
+        categories={categories}
+        allTags={tags}
+        onSubmit={createSite}
+        enableUrlAnalysis
+      />
     </div>
   );
 }

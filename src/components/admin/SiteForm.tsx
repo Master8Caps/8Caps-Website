@@ -13,6 +13,8 @@ import { useUpload } from "@/lib/use-upload";
 import { ServicesEditor } from "./ServicesEditor";
 import { ScreenshotsEditor } from "./ScreenshotsEditor";
 import { TagSelector } from "./TagSelector";
+import { UrlAnalyzer } from "./UrlAnalyzer";
+import type { AnalysisResult } from "@/types/onboarding";
 
 const EMPTY: SiteFormValues = {
   name: "",
@@ -43,11 +45,13 @@ export function SiteForm({
   categories,
   allTags,
   onSubmit,
+  enableUrlAnalysis = false,
 }: {
   initial?: SiteFormValues;
   categories: Category[];
   allTags: Tag[];
   onSubmit: (values: SiteFormValues) => Promise<ActionResult>;
+  enableUrlAnalysis?: boolean;
 }) {
   const [values, setValues] = useState<SiteFormValues>(initial ?? EMPTY);
   const [slugEdited, setSlugEdited] = useState(Boolean(initial));
@@ -83,8 +87,38 @@ export function SiteForm({
     });
   }
 
+  function applyAnalysis(
+    result: AnalysisResult,
+    analysedUrl: string,
+    logoUrl: string | null,
+  ) {
+    const category = categories.find(
+      (c) => c.slug === result.suggestedCategorySlug,
+    );
+    const tagIds = allTags
+      .filter((t) => result.suggestedTagSlugs.includes(t.slug))
+      .map((t) => t.id);
+    setSlugEdited(true); // keep the AI slug; don't let name-typing overwrite it
+    setValues((v) => ({
+      ...v,
+      name: result.name,
+      slug: result.suggestedSlug,
+      url: analysedUrl,
+      logoUrl: logoUrl ?? v.logoUrl,
+      shortSummary: result.shortSummary,
+      fullOverview: result.fullOverview,
+      targetAudience: result.targetAudience,
+      categoryId: category?.id ?? v.categoryId,
+      seoTitle: result.seoTitle,
+      seoDescription: result.seoDescription,
+      services: result.services,
+      tagIds,
+    }));
+  }
+
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl space-y-8 p-8">
+      {enableUrlAnalysis && <UrlAnalyzer onResult={applyAnalysis} />}
       {/* Basics */}
       <section className="space-y-3">
         <h2 className={sectionTitle}>Basics</h2>
