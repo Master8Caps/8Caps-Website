@@ -5,6 +5,7 @@ import { DirectoryGrid } from "@/components/site/DirectoryGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { getFeaturedSites } from "@/lib/data/sites";
 import { getCategories } from "@/lib/data/categories";
+import { categoryIcon } from "@/lib/category-icons";
 
 // Revalidate the static page hourly; admin publish actions in Plan 2 will
 // trigger on-demand revalidation.
@@ -67,28 +68,33 @@ export default async function HomePage() {
         <Container>
           <h2 className="text-2xl font-bold text-ink">Browse by category</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((c) => (
-              <Link
-                key={c.id}
-                href={`/sites?category=${c.slug}`}
-                className="rounded-card border bg-surface p-5 hover:shadow-md transition-shadow"
-                style={{ borderColor: "var(--color-hairline)" }}
-              >
-                <div
-                  className="h-5 w-5 rounded-md mb-2"
-                  style={{ background: "var(--color-oxford)" }}
-                />
-                <h3
-                  className="font-semibold text-ink text-sm"
-                  style={{ fontFamily: "var(--font-heading)" }}
+            {categories.map((c) => {
+              const Icon = categoryIcon(c.slug);
+              return (
+                <Link
+                  key={c.id}
+                  href={`/sites?category=${c.slug}`}
+                  className="rounded-card border bg-surface p-5 hover:shadow-md transition-shadow"
+                  style={{ borderColor: "var(--color-hairline)" }}
                 >
-                  {c.name}
-                </h3>
-                {c.description && (
-                  <p className="mt-1 text-xs text-ink-muted">{c.description}</p>
-                )}
-              </Link>
-            ))}
+                  <div
+                    className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg"
+                    style={{ background: "var(--color-oxford)" }}
+                  >
+                    <Icon size={18} strokeWidth={1.75} className="text-white" />
+                  </div>
+                  <h3
+                    className="font-semibold text-ink text-sm"
+                    style={{ fontFamily: "var(--font-heading)" }}
+                  >
+                    {c.name}
+                  </h3>
+                  {c.description && (
+                    <p className="mt-1 text-xs text-ink-muted">{c.description}</p>
+                  )}
+                </Link>
+              );
+            })}
           </div>
         </Container>
       </section>
