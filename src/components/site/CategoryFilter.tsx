@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Category } from "@/types/domain";
+import type { Category, SiteLifecycle } from "@/types/domain";
 
 export function CategoryFilter({
   categories,
@@ -10,7 +10,7 @@ export function CategoryFilter({
   categories: Category[];
   activeCategory: string | null;
   query: string;
-  lifecycle: string | null;
+  lifecycle: SiteLifecycle | null;
 }) {
   function hrefFor(categorySlug: string | null): string {
     const params = new URLSearchParams();

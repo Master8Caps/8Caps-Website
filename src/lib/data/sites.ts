@@ -1,5 +1,5 @@
 import { createPublicClient } from "@/lib/supabase/public";
-import { getPagination } from "@/lib/directory";
+import { getPagination, PAGE_SIZE } from "@/lib/directory";
 import type { DirectoryParams } from "@/lib/directory";
 import { getCategoryBySlug } from "@/lib/data/categories";
 import type {
@@ -129,7 +129,8 @@ export async function getDirectorySites(
   params: DirectoryParams,
 ): Promise<DirectoryResult> {
   const supabase = createPublicClient();
-  const counting = getPagination(params.page, Number.MAX_SAFE_INTEGER);
+  const from = (params.page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
 
   // Resolve a category slug to its id. Filtering on an embedded resource is
   // fiddly in PostgREST, so we filter on the direct `category_id` column.
@@ -148,9 +149,13 @@ export async function getDirectorySites(
     .order("is_featured", { ascending: false })
     .order("name");
 
-  if (params.query) {
+  // Strip characters that are significant in a PostgREST `.or()` expression
+  // so a search term like "a,b" cannot break the filter (RLS already blocks
+  // data access — this prevents a malformed-query 400).
+  const safeQuery = params.query.replace(/[,()*\\]/g, " ").trim();
+  if (safeQuery) {
     q = q.or(
-      `name.ilike.%${params.query}%,short_summary.ilike.%${params.query}%`,
+      `name.ilike.%${safeQuery}%,short_summary.ilike.%${safeQuery}%`,
     );
   }
   if (params.lifecycle) {
@@ -160,7 +165,7 @@ export async function getDirectorySites(
     q = q.eq("category_id", categoryId);
   }
 
-  q = q.range(counting.from, counting.to);
+  q = q.range(from, to);
 
   const { data, error, count } = await q;
   if (error) throw new Error(`Failed to load directory: ${error.message}`);
@@ -223,10 +228,18 @@ export async function getRelatedSites(
   return ((data ?? []) as unknown as SummaryRow[]).map(toSummary);
 }
 
-/** All published slugs — used by sitemap and static params. */
+/**
+ * Published + public site slugs — used by sitemap and static params.
+ * The filters are explicit (defense-in-depth) so drafts never leak even if
+ * this is ever called with a client that bypasses RLS.
+ */
 export async function getAllSiteSlugs(): Promise<string[]> {
   const supabase = createPublicClient();
-  const { data, error } = await supabase.from("sites").select("slug");
+  const { data, error } = await supabase
+    .from("sites")
+    .select("slug")
+    .eq("publish_status", "published")
+    .eq("visibility", "public");
   if (error) throw new Error(`Failed to load slugs: ${error.message}`);
   return (data ?? []).map((r) => r.slug as string);
 }

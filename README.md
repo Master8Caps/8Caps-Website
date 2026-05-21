@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 8Caps Website
 
-## Getting Started
+Marketing directory website for **8Caps** — a credibility hub and browsable
+catalogue of the websites, tools, and services 8Caps owns and operates.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **React 19** + **TypeScript**
+- **Tailwind CSS v4**
+- **Supabase** — Postgres database (public read via Row Level Security)
+- **Vitest** + **React Testing Library** for tests
+- Deployed on **Vercel**
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app runs at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill in the values:
 
-## Learn More
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project API URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable / anon key (read-only public access) |
+| `NEXT_PUBLIC_SITE_URL` | Public base URL of the site (e.g. the Vercel domain; `http://localhost:3000` in dev) |
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm test` | Run the test suite |
+| `npm run typecheck` | Type-check with `tsc` |
+| `npm run lint` | Lint with ESLint |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Database
 
-## Deploy on Vercel
+The schema, Row Level Security policies, and seed data live in `supabase/`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `supabase/migrations/` — schema and RLS migrations
+- `supabase/seed.sql` — sample categories, tags, and sites
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Public pages read through a typed data-access layer in `src/lib/data/`. RLS
+restricts the anon key to sites that are `published` and `public`.
+
+## Project status
+
+This is **Plan 1** — the public-facing site (homepage, directory, profile
+pages, about, contact, SEO). The admin dashboard, authentication, and the
+enquiry-submission pipeline are Plan 2.
+
+- Design spec: `docs/superpowers/specs/2026-05-21-8caps-directory-website-design.md`
+- Implementation plan: `docs/superpowers/plans/2026-05-21-8caps-foundation-public-site.md`
