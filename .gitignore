@@ -1,6 +1,9 @@
 # Claude Code local settings
 .claude/settings.local.json
 
+# Superpowers visual-brainstorm sessions
+.superpowers/
+
 # dependencies
 node_modules/
 .pnp/
