@@ -1,0 +1,534 @@
+# 8Caps Marketing Directory Website - Project Context
+
+## Project Goal
+
+Build a marketing website for **8Caps** that acts as a credibility hub and service directory for all websites, brands, tools, and services owned by 8Caps.
+
+The purpose of the website is to:
+
+1. Establish credibility for the 8caps domain when used for outreach.
+2. Let visitors explore all services owned or operated by 8Caps.
+3. Give each website/service its own dedicated profile page.
+4. Allow admin users to add, edit, and manage sites from a private dashboard.
+5. Include a future-ready onboarding system where an admin can submit a website URL, and the platform crawls/analyzes the site to generate a draft overview, service list, tags, and suggested content.
+
+---
+
+# Core Concept
+
+The website is essentially a directory of 8Caps-owned websites.
+
+Example structure:
+
+- Homepage
+- Services / Websites Directory
+- Individual Website Profile Pages
+- About 8Caps
+- Contact / Enquiry Page
+- Admin Dashboard
+- Admin Login
+- Add New Website Flow
+- Edit Website Content Flow
+
+Each website listed should have its own page containing:
+
+- Website name
+- URL
+- Logo
+- Short summary
+- Full overview
+- Main services
+- Target audience
+- Industry/category
+- Key benefits
+- Screenshots/images
+- CTA button to visit the site
+- CTA button to enquire through 8Caps
+- SEO metadata
+
+---
+
+# Tech Direction
+
+Use a modern full-stack web app stack.
+
+Preferred direction:
+
+- Next.js / React
+- TypeScript
+- Tailwind CSS
+- Supabase for database and authentication
+- Supabase Storage or local media handling for logos/screenshots
+- Server-side routes/actions for crawling and AI analysis
+- Optional: OpenAI/LLM integration for content generation
+
+The site should be clean, modern, fast, credible, and simple to maintain.
+
+---
+
+# Public Website Requirements
+
+## Homepage
+
+The homepage should quickly explain what 8Caps is.
+
+Suggested positioning:
+
+> 8Caps is a portfolio of digital services, platforms, tools, and specialist websites built to solve practical business problems.
+
+Homepage sections:
+
+### Hero Section
+
+- Headline
+- Subheadline
+- CTA: Explore Our Services
+- CTA: Contact 8Caps
+
+### Featured Websites / Services
+
+Cards for selected websites containing:
+
+- Logo
+- Name
+- Short description
+- Category
+
+### Categories Section
+
+Potential categories:
+
+- Automation
+- Lead Generation
+- Property
+- Marketing
+- AI Tools
+- Data Services
+
+Categories should be editable from the admin panel.
+
+### Why 8Caps Section
+
+Focus on:
+
+- Credibility
+- Range of services
+- Specialist websites
+- Practical business solutions
+
+### Contact CTA
+
+Simple enquiry/contact section.
+
+---
+
+# Directory Page
+
+A searchable/filterable list of all websites.
+
+Features:
+
+- Search by name, service, keyword, or category
+- Filter by category
+- Filter by status:
+  - Live
+  - Coming soon
+  - Internal
+  - Archived
+
+Cards should display:
+
+- Logo
+- Website name
+- Short summary
+- Category
+- Visit website button
+- View details button
+
+---
+
+# Individual Website Pages
+
+Each website should have a dedicated page.
+
+Example URL structure:
+
+`/sites/automated-panda`
+
+Page content:
+
+- Hero section with name, logo, URL, and summary
+- Website overview
+- Services offered
+- Who it helps
+- Key features
+- Screenshots
+- CTA section
+- Related websites/services
+
+---
+
+# Admin Requirements
+
+Admin users need to log in and manage content.
+
+## Authentication
+
+Use Supabase Auth.
+
+Only approved admin users should be able to access `/admin`.
+
+Admin functionality:
+
+- Login
+- Logout
+- View all websites
+- Add website manually
+- Edit website
+- Delete/archive website
+- Upload/change logo
+- Upload screenshots
+- Mark websites as featured
+- Manage categories
+- Trigger website analysis/crawl
+
+---
+
+# Admin Dashboard Pages
+
+Suggested admin routes:
+
+- `/admin`
+- `/admin/sites`
+- `/admin/sites/new`
+- `/admin/sites/[id]/edit`
+- `/admin/categories`
+- `/admin/settings`
+
+---
+
+# Website Onboarding Flow
+
+The key feature is the ability to onboard a new site from a URL.
+
+## Flow
+
+Admin enters:
+
+- Website URL
+- Optional notes
+- Optional category
+- Optional ownership/status
+
+The system should then:
+
+1. Crawl the homepage
+2. Extract page title, meta description, headings, visible text, and links
+3. Optionally crawl a limited number of internal pages
+4. Analyze the content using an LLM
+5. Generate a draft website profile
+6. Save it as a draft for admin review
+7. Allow admin to edit and publish
+
+---
+
+# Generated Fields
+
+The analysis system should generate:
+
+- Website name
+- Short summary
+- Full overview
+- Services offered
+- Target audience
+- Industry/category suggestions
+- Keywords/tags
+- Suggested CTA text
+- Suggested SEO title
+- Suggested SEO description
+- Suggested slug
+- Confidence score
+- Notes about missing/unclear information
+
+Important:
+
+Generated content should NEVER auto-publish.
+
+All generated content should be saved as a draft requiring admin review.
+
+---
+
+# Crawling Rules
+
+Keep crawling simple and safe initially.
+
+## Initial Version
+
+- Crawl only the submitted URL
+- Extract readable text
+- Ignore scripts/styles
+- Store raw extracted text for debugging
+- Limit content length
+- Handle errors gracefully
+
+## Future Version
+
+- Crawl up to 5 internal pages
+- Prioritize:
+  - About
+  - Services
+  - Pricing
+  - Contact
+  - Features
+- Respect rate limits
+- Avoid aggressive crawling
+
+---
+
+# Suggested Database Schema
+
+## profiles
+
+Fields:
+
+- id
+- email
+- role
+- created_at
+
+Roles:
+
+- admin
+- editor
+
+---
+
+## sites
+
+Fields:
+
+- id
+- name
+- slug
+- url
+- logo_url
+- short_summary
+- full_overview
+- target_audience
+- category_id
+- status
+- visibility
+- is_featured
+- seo_title
+- seo_description
+- generated_by_ai
+- ai_confidence
+- raw_crawl_text
+- created_at
+- updated_at
+
+Possible status values:
+
+- draft
+- published
+- archived
+
+Possible visibility values:
+
+- public
+- private
+
+---
+
+## services
+
+Fields:
+
+- id
+- site_id
+- name
+- description
+- sort_order
+
+---
+
+## categories
+
+Fields:
+
+- id
+- name
+- slug
+- description
+
+---
+
+## screenshots
+
+Fields:
+
+- id
+- site_id
+- image_url
+- alt_text
+- sort_order
+
+---
+
+## tags
+
+Fields:
+
+- id
+- name
+- slug
+
+---
+
+## site_tags
+
+Fields:
+
+- site_id
+- tag_id
+
+---
+
+# Design Direction
+
+The design should feel:
+
+- Professional
+- Clean
+- Credible
+- Modern
+- Minimal
+- Slightly premium
+- Easy to browse
+
+Avoid anything too playful or cluttered.
+
+Suggested visual direction:
+
+- Dark/navy or black base
+- White content sections
+- Subtle gradients
+- Clean cards
+- Rounded corners
+- Strong typography
+- Simple icons
+- Clear CTA buttons
+
+---
+
+# First Build Priority
+
+Build in phases.
+
+## Phase 1
+
+- Public homepage
+- Directory page
+- Individual site pages
+- Static/dummy data
+- Responsive layout
+
+## Phase 2
+
+- Supabase database
+- Admin auth
+- Admin CRUD for websites
+- Categories
+- Publish/draft status
+
+## Phase 3
+
+- URL crawler
+- AI analysis
+- Draft generation from URL
+- Admin review/edit flow
+
+## Phase 4
+
+- Image uploads
+- Screenshots
+- SEO improvements
+- Search/filtering
+- Analytics
+
+---
+
+# Claude Code Instructions
+
+Start by creating the project structure and building Phase 1 using clean placeholder data.
+
+Use reusable components such as:
+
+- SiteCard
+- SiteHero
+- CategoryFilter
+- DirectoryGrid
+- CTASection
+- AdminLayout
+- SiteForm
+- StatusBadge
+
+Keep the code clean and scalable.
+
+Do NOT hardcode everything into pages.
+
+Use typed data models from the start so the project can later move from mock data to Supabase easily.
+
+Use TypeScript types/interfaces for:
+
+- Site
+- Service
+- Category
+- Screenshot
+- Tag
+
+Do not implement the AI crawler in the first commit unless the base site and admin structure are complete.
+
+---
+
+# Important Assumptions
+
+- 8Caps owns or operates multiple websites/services
+- The website is primarily for credibility and discovery
+- Admin content should always be editable manually
+- AI-generated content should be treated as draft content
+- The system should scale easily as more websites are added
+- The onboarding flow should reduce manual admin work as much as possible
+
+---
+
+# Future Ideas
+
+Potential future features:
+
+- AI-generated logos/placeholders
+- Automated screenshot capture
+- Traffic analytics per site
+- Internal/private service listings
+- Case studies
+- Testimonials
+- Team pages
+- Lead routing per service
+- Multi-language support
+- Public API
+- CMS-style editing experience
+- Automated SEO audits
+- Site health/status monitoring
+- AI-powered service recommendations
+
+---
+
+# Overall Product Goal
+
+Create a polished, scalable, credibility-focused platform that acts as:
+
+- A directory of 8Caps services
+- A trust layer for outreach
+- A central hub for all brands/websites
+- A lightweight internal CMS
+- A future-ready AI-assisted onboarding platform
