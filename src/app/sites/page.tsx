@@ -31,58 +31,67 @@ export default async function DirectoryPage({
   if (params.lifecycle) baseParams.set("lifecycle", params.lifecycle);
 
   return (
-    <section className="py-14">
-      <Container>
-        <h1 className="text-3xl font-bold">Website directory</h1>
-        <p className="mt-2 text-ink-400">
-          {result.total} {result.total === 1 ? "website" : "websites"} operated
-          by 8Caps.
-        </p>
+    <>
+      {/* Compact dark Oxford Blue band — dot grid + subtler glow */}
+      <section className="band-surface py-10 text-white">
+        <Container>
+          <h1 className="text-3xl font-bold">Website directory</h1>
+          <p className="mt-2 text-white/65">
+            {result.total} {result.total === 1 ? "website" : "websites"} operated
+            by 8Caps.
+          </p>
+        </Container>
+      </section>
 
-        {/* Search */}
-        <form action="/sites" method="get" className="mt-6 flex gap-3">
-          <input
-            type="search"
-            name="q"
-            defaultValue={params.query}
-            placeholder="Search by name or keyword…"
-            className="w-full max-w-md rounded-lg border border-white/15 bg-navy-900 px-4 py-2.5 text-sm placeholder:text-ink-600"
+      {/* Light body — filters + results */}
+      <section className="bg-surface py-10">
+        <Container>
+          {/* Search */}
+          <form action="/sites" method="get" className="flex gap-3">
+            <input
+              type="search"
+              name="q"
+              defaultValue={params.query}
+              placeholder="Search by name or keyword…"
+              className="w-full max-w-md rounded-lg border px-4 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-accent"
+              style={{ borderColor: "var(--color-hairline)" }}
+            />
+            {params.category && (
+              <input type="hidden" name="category" value={params.category} />
+            )}
+            {params.lifecycle && (
+              <input type="hidden" name="lifecycle" value={params.lifecycle} />
+            )}
+            <button
+              type="submit"
+              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+            >
+              Search
+            </button>
+          </form>
+
+          {/* Category filter */}
+          <div className="mt-5">
+            <CategoryFilter
+              categories={categories}
+              activeCategory={params.category}
+              query={params.query}
+              lifecycle={params.lifecycle}
+            />
+          </div>
+
+          {/* Results */}
+          <div className="mt-8">
+            <DirectoryGrid sites={result.sites} />
+          </div>
+
+          <Pagination
+            page={result.page}
+            totalPages={result.totalPages}
+            baseParams={baseParams}
           />
-          {params.category && (
-            <input type="hidden" name="category" value={params.category} />
-          )}
-          {params.lifecycle && (
-            <input type="hidden" name="lifecycle" value={params.lifecycle} />
-          )}
-          <button
-            type="submit"
-            className="rounded-lg bg-accent-500 px-5 py-2.5 text-sm font-semibold hover:bg-accent-600"
-          >
-            Search
-          </button>
-        </form>
-
-        {/* Category filter */}
-        <div className="mt-5">
-          <CategoryFilter
-            categories={categories}
-            activeCategory={params.category}
-            query={params.query}
-            lifecycle={params.lifecycle}
-          />
-        </div>
-
-        {/* Results */}
-        <div className="mt-8">
-          <DirectoryGrid sites={result.sites} />
-        </div>
-
-        <Pagination
-          page={result.page}
-          totalPages={result.totalPages}
-          baseParams={baseParams}
-        />
-      </Container>
-    </section>
+        </Container>
+      </section>
+    </>
   );
 }

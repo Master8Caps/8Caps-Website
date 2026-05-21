@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <section className="py-14">
+    <section className="bg-surface py-14">
       <Container className="max-w-2xl">
-        <h1 className="text-3xl font-bold">Contact 8Caps</h1>
-        <p className="mt-4 text-ink-400">
+        <h1 className="text-3xl font-bold text-ink">Contact 8Caps</h1>
+        <p className="mt-4 text-ink-muted">
           Have a question about one of our services, or want to be pointed to
           the right tool? Email us and we will get back to you.
         </p>
@@ -21,7 +21,7 @@ export default function ContactPage() {
             master@8caps.co.uk
           </ButtonLink>
         </div>
-        <p className="mt-8 text-sm text-ink-600">
+        <p className="mt-8 text-sm text-ink-muted">
           An online enquiry form is coming soon.
         </p>
       </Container>

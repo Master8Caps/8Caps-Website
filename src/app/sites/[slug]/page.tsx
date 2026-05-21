@@ -45,29 +45,36 @@ export default async function SitePage({
 
   return (
     <>
-      <section className="py-14">
+      {/* Compact dark Oxford Blue band — dot grid + subtler glow */}
+      <section className="band-surface py-12 text-white">
         <Container>
           <SiteHero site={site} />
+        </Container>
+      </section>
 
+      {/* Light body — overview / services / screenshots / related */}
+      <section className="bg-surface py-14">
+        <Container>
           {site.fullOverview && (
-            <div className="mt-12 max-w-3xl">
-              <h2 className="text-xl font-bold">Overview</h2>
-              <p className="mt-3 text-ink-400">{site.fullOverview}</p>
+            <div className="max-w-3xl">
+              <h2 className="text-xl font-bold text-ink">Overview</h2>
+              <p className="mt-3 text-ink-muted">{site.fullOverview}</p>
             </div>
           )}
 
           {site.services.length > 0 && (
-            <div className="mt-12">
-              <h2 className="text-xl font-bold">Services offered</h2>
+            <div className={site.fullOverview ? "mt-12" : undefined}>
+              <h2 className="text-xl font-bold text-ink">Services offered</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 {site.services.map((s) => (
                   <div
                     key={s.id}
-                    className="rounded-card border border-white/10 bg-navy-900 p-4"
+                    className="rounded-card border bg-surface p-4"
+                    style={{ borderColor: "var(--color-hairline)" }}
                   >
-                    <h3 className="font-semibold">{s.name}</h3>
+                    <h3 className="font-semibold text-ink">{s.name}</h3>
                     {s.description && (
-                      <p className="mt-1 text-sm text-ink-400">
+                      <p className="mt-1 text-sm text-ink-muted">
                         {s.description}
                       </p>
                     )}
@@ -79,14 +86,14 @@ export default async function SitePage({
 
           {site.targetAudience && (
             <div className="mt-12 max-w-3xl">
-              <h2 className="text-xl font-bold">Who it helps</h2>
-              <p className="mt-3 text-ink-400">{site.targetAudience}</p>
+              <h2 className="text-xl font-bold text-ink">Who it helps</h2>
+              <p className="mt-3 text-ink-muted">{site.targetAudience}</p>
             </div>
           )}
 
           {site.screenshots.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-xl font-bold">Screenshots</h2>
+              <h2 className="text-xl font-bold text-ink">Screenshots</h2>
               <div className="mt-4">
                 <ScreenshotGallery screenshots={site.screenshots} />
               </div>
@@ -98,7 +105,8 @@ export default async function SitePage({
               {site.tags.map((t) => (
                 <span
                   key={t.id}
-                  className="rounded-full border border-white/15 px-3 py-1 text-xs text-ink-400"
+                  className="rounded-full border px-3 py-1 text-xs text-ink-muted"
+                  style={{ borderColor: "var(--color-hairline)" }}
                 >
                   {t.name}
                 </span>
@@ -108,7 +116,7 @@ export default async function SitePage({
 
           {related.length > 0 && (
             <div className="mt-16">
-              <h2 className="text-xl font-bold">Related websites</h2>
+              <h2 className="text-xl font-bold text-ink">Related websites</h2>
               <div className="mt-4">
                 <DirectoryGrid sites={related} />
               </div>

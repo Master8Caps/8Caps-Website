@@ -25,14 +25,20 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="py-20">
+      {/* Hero — Oxford Blue with dot grid + corner glow */}
+      <section className="hero-surface py-20 text-white">
         <Container>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-            A portfolio of digital services built to solve practical business
+          <p
+            className="text-xs font-semibold uppercase tracking-widest"
+            style={{ color: "var(--color-accent-soft)", fontFamily: "var(--font-heading)" }}
+          >
+            8Caps Portfolio
+          </p>
+          <h1 className="mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
+            A portfolio of digital services built to solve real business
             problems.
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-ink-400">
+          <p className="mt-5 max-w-2xl text-white/70 text-base">
             8Caps builds and operates specialist websites, platforms and tools.
             Explore everything we offer in one place.
           </p>
@@ -45,31 +51,41 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Featured */}
-      <section className="bg-navy-900 py-16">
+      {/* Featured — white */}
+      <section className="bg-surface py-16">
         <Container>
-          <h2 className="text-2xl font-bold">Featured websites</h2>
-          <p className="mt-1 text-ink-400">A selection of our flagship products.</p>
+          <h2 className="text-2xl font-bold text-ink">Featured websites</h2>
+          <p className="mt-1 text-ink-muted">A selection of our flagship products.</p>
           <div className="mt-8">
             <DirectoryGrid sites={featured} />
           </div>
         </Container>
       </section>
 
-      {/* Categories */}
-      <section className="py-16">
+      {/* Categories — light grey */}
+      <section className="bg-surface-muted py-16">
         <Container>
-          <h2 className="text-2xl font-bold">Browse by category</h2>
+          <h2 className="text-2xl font-bold text-ink">Browse by category</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((c) => (
               <Link
                 key={c.id}
                 href={`/sites?category=${c.slug}`}
-                className="rounded-card border border-white/10 bg-navy-900 p-5 hover:border-white/25"
+                className="rounded-card border bg-surface p-5 hover:shadow-md transition-shadow"
+                style={{ borderColor: "var(--color-hairline)" }}
               >
-                <h3 className="font-semibold">{c.name}</h3>
+                <div
+                  className="h-5 w-5 rounded-md mb-2"
+                  style={{ background: "var(--color-oxford)" }}
+                />
+                <h3
+                  className="font-semibold text-ink text-sm"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  {c.name}
+                </h3>
                 {c.description && (
-                  <p className="mt-1 text-sm text-ink-400">{c.description}</p>
+                  <p className="mt-1 text-xs text-ink-muted">{c.description}</p>
                 )}
               </Link>
             ))}
@@ -77,15 +93,25 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Why 8Caps */}
-      <section className="bg-navy-900 py-16">
+      {/* Why 8Caps — white */}
+      <section className="bg-surface py-16">
         <Container>
-          <h2 className="text-2xl font-bold">Why 8Caps</h2>
+          <h2 className="text-2xl font-bold text-ink">Why 8Caps</h2>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {WHY.map((item) => (
               <div key={item.title}>
-                <h3 className="font-semibold text-accent-500">{item.title}</h3>
-                <p className="mt-1 text-sm text-ink-400">{item.body}</p>
+                {/* Accent tick bar */}
+                <div
+                  className="h-0.5 w-7 rounded-full"
+                  style={{ background: "var(--color-accent)" }}
+                />
+                <h3
+                  className="mt-2 font-semibold text-ink text-sm"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  {item.title}
+                </h3>
+                <p className="mt-1 text-sm text-ink-muted leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
