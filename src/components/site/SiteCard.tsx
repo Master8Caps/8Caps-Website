@@ -5,7 +5,10 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 
 export function SiteCard({ site }: { site: SiteSummary }) {
   return (
-    <article className="flex flex-col rounded-card border border-white/10 bg-navy-900 p-5 transition-colors hover:border-white/25">
+    <article
+      className="flex flex-col rounded-card border bg-surface p-5 shadow-sm transition-shadow hover:shadow-md"
+      style={{ borderColor: "var(--color-hairline)" }}
+    >
       <div className="flex items-center gap-3">
         {site.logoUrl ? (
           <Image
@@ -16,28 +19,37 @@ export function SiteCard({ site }: { site: SiteSummary }) {
             className="rounded-lg"
           />
         ) : (
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-navy-800 text-sm font-bold text-ink-400">
+          /* Gradient placeholder chip */
+          <div
+            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg text-sm font-bold text-white"
+            style={{ background: "linear-gradient(135deg,#002147,#3d7bd9)" }}
+          >
             {site.name.charAt(0)}
           </div>
         )}
         <div>
-          <h3 className="font-semibold leading-tight">{site.name}</h3>
+          <h3
+            className="font-semibold leading-tight text-ink"
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
+            {site.name}
+          </h3>
           {site.category && (
-            <p className="text-xs text-ink-400">{site.category.name}</p>
+            <p className="text-xs text-ink-muted">{site.category.name}</p>
           )}
         </div>
       </div>
 
-      <p className="mt-4 flex-1 text-sm text-ink-400">{site.shortSummary}</p>
+      <p className="mt-4 flex-1 text-sm text-ink-muted leading-relaxed">{site.shortSummary}</p>
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-4 flex items-center">
         <StatusBadge lifecycle={site.lifecycle} />
       </div>
 
       <div className="mt-4 flex gap-3">
         <Link
           href={`/sites/${site.slug}`}
-          className="flex-1 rounded-lg bg-accent-500 px-3 py-2 text-center text-sm font-semibold hover:bg-accent-600"
+          className="flex-1 rounded-lg bg-oxford px-3 py-2 text-center text-sm font-semibold text-white hover:opacity-90 transition-opacity"
         >
           View details
         </Link>
@@ -45,7 +57,8 @@ export function SiteCard({ site }: { site: SiteSummary }) {
           href={site.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 rounded-lg border border-white/20 px-3 py-2 text-center text-sm font-semibold hover:bg-white/10"
+          className="flex-1 rounded-lg border px-3 py-2 text-center text-sm font-semibold text-oxford hover:bg-surface-muted transition-colors"
+          style={{ borderColor: "var(--color-hairline)" }}
         >
           Visit website
         </a>

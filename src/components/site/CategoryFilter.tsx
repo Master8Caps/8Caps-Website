@@ -21,10 +21,9 @@ export function CategoryFilter({
     return qs ? `/sites?${qs}` : "/sites";
   }
 
-  const base =
-    "rounded-full px-3 py-1.5 text-sm transition-colors";
-  const active = "bg-accent-500 text-white";
-  const inactive = "border border-white/15 text-ink-400 hover:text-white";
+  const base = "rounded-full px-3 py-1.5 text-sm font-medium transition-colors";
+  const active = "bg-accent text-white";
+  const inactive = "border border-hairline text-ink-muted hover:text-ink hover:border-oxford/30";
 
   return (
     <div className="flex flex-wrap gap-2">

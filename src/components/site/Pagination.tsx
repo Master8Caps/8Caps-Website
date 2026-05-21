@@ -18,9 +18,9 @@ export function Pagination({
   }
 
   const linkClass =
-    "rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10";
+    "rounded-lg border border-hairline px-4 py-2 text-sm text-oxford hover:bg-surface-muted transition-colors";
   const disabledClass =
-    "rounded-lg border border-white/5 px-4 py-2 text-sm text-ink-600";
+    "rounded-lg border border-hairline px-4 py-2 text-sm text-ink-muted opacity-50";
 
   return (
     <nav className="mt-8 flex items-center justify-between">
@@ -31,7 +31,7 @@ export function Pagination({
       ) : (
         <span className={disabledClass}>← Previous</span>
       )}
-      <span className="text-sm text-ink-400">
+      <span className="text-sm text-ink-muted">
         Page {page} of {totalPages}
       </span>
       {page < totalPages ? (

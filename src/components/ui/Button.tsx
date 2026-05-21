@@ -3,9 +3,11 @@ import type { ReactNode } from "react";
 
 type Variant = "primary" | "secondary";
 
+// primary = filled accent (on dark) or filled Oxford Blue (on light)
+// secondary = outlined
 const STYLES: Record<Variant, string> = {
-  primary: "bg-accent-500 text-white hover:bg-accent-600",
-  secondary: "border border-white/20 text-white hover:bg-white/10",
+  primary: "bg-accent text-white hover:opacity-90",
+  secondary: "border border-white/30 text-white hover:bg-white/10",
 };
 
 export function ButtonLink({

@@ -15,19 +15,23 @@ export function SiteHero({ site }: { site: SiteDetail }) {
           className="rounded-xl"
         />
       ) : (
-        <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-navy-800 text-2xl font-bold text-ink-400">
+        /* Gradient placeholder logo chip */
+        <div
+          className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl text-2xl font-bold text-white"
+          style={{ background: "linear-gradient(135deg,#002147,#3d7bd9)" }}
+        >
           {site.name.charAt(0)}
         </div>
       )}
       <div className="flex-1">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-3xl font-bold">{site.name}</h1>
+          <h1 className="text-3xl font-bold text-white">{site.name}</h1>
           <StatusBadge lifecycle={site.lifecycle} />
         </div>
         {site.category && (
-          <p className="mt-1 text-sm text-ink-400">{site.category.name}</p>
+          <p className="mt-1 text-sm text-white/60">{site.category.name}</p>
         )}
-        <p className="mt-3 max-w-2xl text-ink-400">{site.shortSummary}</p>
+        <p className="mt-3 max-w-2xl text-white/75">{site.shortSummary}</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <ButtonLink href={site.url} external>
             Visit website

@@ -4,7 +4,10 @@ import { SiteCard } from "./SiteCard";
 export function DirectoryGrid({ sites }: { sites: SiteSummary[] }) {
   if (sites.length === 0) {
     return (
-      <p className="rounded-card border border-white/10 bg-navy-900 p-8 text-center text-ink-400">
+      <p
+        className="rounded-card border bg-surface p-8 text-center text-ink-muted"
+        style={{ borderColor: "var(--color-hairline)" }}
+      >
         No websites match your search.
       </p>
     );

@@ -5,16 +5,18 @@ const LABELS: Record<SiteLifecycle, string> = {
   coming_soon: "Coming soon",
 };
 
+// Soft pill using status tokens: green for Live, amber for Coming soon, with a leading dot.
 const STYLES: Record<SiteLifecycle, string> = {
-  live: "bg-emerald-500/15 text-emerald-300",
-  coming_soon: "bg-amber-500/15 text-amber-300",
+  live: "bg-live-bg text-live",
+  coming_soon: "bg-soon-bg text-soon",
 };
 
 export function StatusBadge({ lifecycle }: { lifecycle: SiteLifecycle }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STYLES[lifecycle]}`}
+      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${STYLES[lifecycle]}`}
     >
+      <span aria-hidden="true">●</span>
       {LABELS[lifecycle]}
     </span>
   );
