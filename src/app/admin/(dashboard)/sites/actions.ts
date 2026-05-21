@@ -6,11 +6,15 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { siteFormSchema } from "@/lib/schemas";
 import type { ActionResult, SiteFormValues } from "@/types/domain";
 
-/** Revalidate every public route that could show site data. */
-function revalidatePublic(slug: string) {
+/**
+ * Revalidate every public route that could show site data. Uses the
+ * `/sites/[slug]` route pattern so every detail page is refreshed — this
+ * covers creation, deletion, and slug changes without needing the slug.
+ */
+function revalidatePublic() {
   revalidatePath("/");
   revalidatePath("/sites");
-  revalidatePath(`/sites/${slug}`);
+  revalidatePath("/sites/[slug]", "page");
 }
 
 /** Replace a site's child rows (services, screenshots, tags). */
@@ -19,9 +23,23 @@ async function writeChildren(
   siteId: string,
   values: SiteFormValues,
 ): Promise<string | null> {
-  await supabase.from("services").delete().eq("site_id", siteId);
-  await supabase.from("screenshots").delete().eq("site_id", siteId);
-  await supabase.from("site_tags").delete().eq("site_id", siteId);
+  const deletedServices = await supabase
+    .from("services")
+    .delete()
+    .eq("site_id", siteId);
+  if (deletedServices.error) return deletedServices.error.message;
+
+  const deletedScreenshots = await supabase
+    .from("screenshots")
+    .delete()
+    .eq("site_id", siteId);
+  if (deletedScreenshots.error) return deletedScreenshots.error.message;
+
+  const deletedTags = await supabase
+    .from("site_tags")
+    .delete()
+    .eq("site_id", siteId);
+  if (deletedTags.error) return deletedTags.error.message;
 
   if (values.services.length > 0) {
     const { error } = await supabase.from("services").insert(
@@ -96,7 +114,7 @@ export async function createSite(values: SiteFormValues): Promise<ActionResult> 
     return { ok: false, error: `Site saved, but related data failed: ${childError}` };
   }
 
-  revalidatePublic(parsed.data.slug);
+  revalidatePublic();
   redirect("/admin/sites");
 }
 
@@ -124,7 +142,7 @@ export async function updateSite(
     return { ok: false, error: `Site saved, but related data failed: ${childError}` };
   }
 
-  revalidatePublic(parsed.data.slug);
+  revalidatePublic();
   redirect("/admin/sites");
 }
 
@@ -134,7 +152,6 @@ export async function deleteSite(id: string): Promise<ActionResult> {
   if (error) {
     return { ok: false, error: `Could not delete site: ${error.message}` };
   }
-  revalidatePath("/");
-  revalidatePath("/sites");
+  revalidatePublic();
   redirect("/admin/sites");
 }
