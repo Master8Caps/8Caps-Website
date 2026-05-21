@@ -63,3 +63,63 @@ export interface Enquiry {
   status: EnquiryStatus;
   createdAt: string;
 }
+
+/** One service row in the site form. */
+export interface ServiceInput {
+  name: string;
+  description: string;
+}
+
+/** One screenshot row in the site form. */
+export interface ScreenshotInput {
+  imageUrl: string;
+  altText: string;
+}
+
+/** The full editable shape of a site, as used by the admin site form. */
+export interface SiteFormValues {
+  name: string;
+  slug: string;
+  url: string;
+  logoUrl: string | null;
+  shortSummary: string;
+  fullOverview: string;
+  targetAudience: string;
+  categoryId: string | null;
+  publishStatus: PublishStatus;
+  lifecycle: SiteLifecycle;
+  visibility: SiteVisibility;
+  isFeatured: boolean;
+  seoTitle: string;
+  seoDescription: string;
+  services: ServiceInput[];
+  screenshots: ScreenshotInput[];
+  tagIds: string[];
+}
+
+/** A site row in the admin list view. */
+export interface AdminSiteRow {
+  id: string;
+  name: string;
+  slug: string;
+  publishStatus: PublishStatus;
+  lifecycle: SiteLifecycle;
+  visibility: SiteVisibility;
+  isFeatured: boolean;
+  categoryName: string | null;
+  updatedAt: string;
+}
+
+/** Dashboard counts. */
+export interface DashboardStats {
+  totalSites: number;
+  publishedSites: number;
+  draftSites: number;
+  categories: number;
+}
+
+/** Result returned by a Server Action on the validation / DB-error path. */
+export interface ActionResult {
+  ok: boolean;
+  error?: string;
+}
