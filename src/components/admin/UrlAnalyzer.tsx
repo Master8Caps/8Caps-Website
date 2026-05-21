@@ -16,6 +16,7 @@ export function UrlAnalyzer({
   const [url, setUrl] = useState("");
   const [log, setLog] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [running, setRunning] = useState(false);
 
   async function analyse() {
@@ -23,6 +24,7 @@ export function UrlAnalyzer({
     setRunning(true);
     setLog([]);
     setError(null);
+    setAnalysis(null);
 
     try {
       const res = await fetch("/api/admin/analyze-url", {
@@ -35,6 +37,7 @@ export function UrlAnalyzer({
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
+      let terminalSeen = false;
 
       for (;;) {
         const { done, value } = await reader.read();
@@ -47,12 +50,23 @@ export function UrlAnalyzer({
           if (event.type === "progress") {
             setLog((l) => [...l, event.message]);
           } else if (event.type === "error") {
+            terminalSeen = true;
             setError(event.message);
           } else if (event.type === "done") {
+            terminalSeen = true;
             setLog((l) => [...l, "Done — review the fields below."]);
+            setAnalysis(event.result);
             onResult(event.result, url.trim(), event.logoUrl);
           }
         }
+      }
+
+      // The stream closed without an error or done event — never leave the
+      // admin staring at a stale log with no outcome.
+      if (!terminalSeen) {
+        setError(
+          "The analysis stopped unexpectedly before finishing — please try again.",
+        );
       }
     } catch (err) {
       setError(
@@ -111,6 +125,23 @@ export function UrlAnalyzer({
         <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
         </p>
+      )}
+
+      {analysis && (
+        <div
+          className="mt-3 rounded-lg border bg-surface p-3 text-sm"
+          style={{ borderColor: "var(--color-hairline)" }}
+        >
+          <p className="text-ink">
+            <span className="font-semibold">AI confidence:</span>{" "}
+            <span className="capitalize">{analysis.confidence}</span>
+          </p>
+          {analysis.notes && (
+            <p className="mt-1 text-ink-muted">
+              <span className="font-semibold">Notes:</span> {analysis.notes}
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

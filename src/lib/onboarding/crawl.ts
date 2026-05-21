@@ -120,17 +120,30 @@ export async function crawlSite(
     onProgress("No extra key pages found — using the homepage only");
   }
 
-  for (const link of keyLinks) {
-    const path = new URL(link).pathname;
-    try {
-      const html = await fetchHtml(link);
-      const page = extractPageText(html);
-      parts.push(`PAGE: ${link}\nTITLE: ${page.title}\n${page.text}`);
-      onProgress(`Fetched ${path}`);
-    } catch (err) {
-      const reason = err instanceof Error ? err.message : "failed";
-      onProgress(`Skipped ${path} — ${reason}`);
-    }
+  // Fetch the key pages and grab the logo concurrently. Doing this in
+  // parallel bounds the crawl's wall-clock to roughly one timeout window
+  // (~15s) instead of one per page, keeping the request well inside the
+  // route's function time budget.
+  const [pageResults, logoUrl] = await Promise.all([
+    Promise.all(
+      keyLinks.map(async (link): Promise<string | null> => {
+        const path = new URL(link).pathname;
+        try {
+          const html = await fetchHtml(link);
+          const page = extractPageText(html);
+          onProgress(`Fetched ${path}`);
+          return `PAGE: ${link}\nTITLE: ${page.title}\n${page.text}`;
+        } catch (err) {
+          const reason = err instanceof Error ? err.message : "failed";
+          onProgress(`Skipped ${path} — ${reason}`);
+          return null;
+        }
+      }),
+    ),
+    grabLogo(homepageHtml, url, onProgress),
+  ]);
+  for (const result of pageResults) {
+    if (result) parts.push(result);
   }
 
   const combinedText = parts.join("\n\n---\n\n").slice(0, MAX_TEXT);
@@ -141,6 +154,5 @@ export async function crawlSite(
   }
   onProgress(`Extracted ${combinedText.length} characters of text`);
 
-  const logoUrl = await grabLogo(homepageHtml, url, onProgress);
   return { combinedText, logoUrl };
 }
