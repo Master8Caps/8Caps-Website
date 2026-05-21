@@ -1,17 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy-950: #0a0e1a;
-  --color-navy-900: #0f1629;
-  --color-navy-800: #1a2440;
-  --color-accent-500: #4f7cff;
-  --color-accent-600: #3b63e0;
-  --color-ink-900: #11151c;
-  --color-ink-600: #4b5563;
-  --color-ink-400: #9aa3b2;
+  /* ── Oxford Blue palette ── */
+  --color-oxford: #002147;
+  --color-oxford-deep: #001731;
+  --color-accent: #3d7bd9;
+  --color-accent-soft: #9cc3ec;
 
-  --radius-card: 0.875rem;
+  /* ── Surface ── */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f4f6f9;
 
+  /* ── Ink ── */
+  --color-ink: #1c2533;
+  --color-ink-muted: #5b6675;
+
+  /* ── Hairline ── */
+  --color-hairline: rgba(0, 33, 71, 0.12);
+
+  /* ── Status tokens ── */
+  --color-live: #1a8a52;
+  --color-live-bg: #e7f6ee;
+  --color-soon: #b9701a;
+  --color-soon-bg: #fdf0e3;
+
+  /* ── Radius ── */
+  --radius-card: 12px;
+
+  /* ── Typography ── */
+  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -20,7 +38,31 @@ html {
 }
 
 body {
-  background-color: var(--color-navy-950);
-  color: white;
-  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+}
+
+/* Hero background: solid Oxford Blue + dot grid + corner glow */
+.hero-surface {
+  background-color: #002147;
+  background-image:
+    radial-gradient(circle at 82% 18%, rgba(61, 123, 217, 0.4), transparent 46%),
+    radial-gradient(rgba(255, 255, 255, 0.085) 1px, transparent 1px);
+  background-size: auto, 16px 16px;
+}
+
+/* Compact dark band for directory / site-profile pages — same dot grid, subtler glow */
+.band-surface {
+  background-color: #002147;
+  background-image:
+    radial-gradient(circle at 75% 50%, rgba(61, 123, 217, 0.22), transparent 55%),
+    radial-gradient(rgba(255, 255, 255, 0.065) 1px, transparent 1px);
+  background-size: auto, 16px 16px;
 }
