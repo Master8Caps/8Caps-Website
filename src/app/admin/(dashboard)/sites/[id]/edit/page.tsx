@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { SiteForm } from "@/components/admin/SiteForm";
+import { DeleteSiteButton } from "@/components/admin/DeleteSiteButton";
 import {
   getAdminCategories,
   getAllTags,
@@ -27,25 +28,18 @@ export default async function EditSitePage({
     return updateSite(id, values);
   }
 
+  // Bind the site id into the delete action; returns the result so the
+  // client button can confirm first and surface any failure.
   async function handleDelete() {
     "use server";
-    // deleteSite redirects to /admin/sites on success; a returned error
-    // (rare) is not surfaced here — the form-action signature is void.
-    await deleteSite(id);
+    return deleteSite(id);
   }
 
   return (
     <div>
       <div className="flex items-center justify-between px-8 pt-8">
         <h1 className="text-2xl font-bold text-ink">Edit website</h1>
-        <form action={handleDelete}>
-          <button
-            type="submit"
-            className="rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-600"
-          >
-            Delete
-          </button>
-        </form>
+        <DeleteSiteButton onDelete={handleDelete} />
       </div>
       <SiteForm
         initial={site}
