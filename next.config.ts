@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "placehold.co" },
+      {
+        protocol: "https",
+        hostname: "vokrxnqitfotucpnvfwe.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
   },
 };
