@@ -60,6 +60,10 @@ export function SiteForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const { upload, uploading } = useUpload();
+  // `proposedCategory` keeps the AI's proposed new category available as a
+  // dropdown option even after the admin toggles to an existing category.
+  // It must stay in sync with `values.newCategoryName` — both are set together
+  // in `applyAnalysis`; the select's onChange only ever moves between them.
   const [proposedCategory, setProposedCategory] = useState<string | null>(
     initial?.newCategoryName ?? null,
   );
