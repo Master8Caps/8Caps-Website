@@ -7,7 +7,7 @@ const CAP_ANCHOR_X = 89; // cap-native x of the crown centre
 
 // ── Tunable composition constants — adjust if the cap does not sit naturally.
 const CAP_WIDTH_RATIO = 2.15; // cap width as a multiple of the "8" width
-const CAP_OVERLAP = 148; // glyph units the crown base sits down into the "8"
+const CAP_OVERLAP = 40; // glyph units the crown base sits down into the "8"
 const PAD = 40; // viewBox padding around the artwork
 
 function r(n: number): number {
@@ -22,7 +22,7 @@ const capCenterX = EIGHT_BOX.x + EIGHT_BOX.w / 2;
 const capTx = capCenterX - CAP_ANCHOR_X * capScale;
 const capTy = CAP_OVERLAP - CAP_CROWN_BOTTOM_Y * capScale;
 // Topmost artwork ≈ cap-native y 14 (the button), scaled into glyph space.
-const artTop = capTy + 6 * capScale - PAD;
+const artTop = capTy + 16 * capScale - PAD;
 
 const CAP_MARKUP =
   `<g transform="translate(${r(capTx)} ${r(capTy)}) ` +
@@ -39,7 +39,11 @@ const top = r(artTop);
 const bottom = EIGHT_BOX.y + EIGHT_BOX.h + PAD;
 
 /** viewBox for the mark alone (capped "8"). */
-export const MARK_VIEWBOX = `${left} ${top} ${r(EIGHT_BOX.w + 2 * PAD)} ${r(bottom - top)}`;
+/** The mark artwork's intrinsic width and height (viewBox units). */
+export const MARK_WIDTH = r(EIGHT_BOX.w + 2 * PAD);
+export const MARK_HEIGHT = r(bottom - top);
+
+export const MARK_VIEWBOX = `${left} ${top} ${MARK_WIDTH} ${MARK_HEIGHT}`;
 
 /** viewBox for the full lockup (capped "8" + "Caps"). */
 export const LOCKUP_VIEWBOX = `${left} ${top} ${r(LOCKUP_BOX.w + 2 * PAD)} ${r(LOCKUP_BOX.h + PAD - top)}`;
