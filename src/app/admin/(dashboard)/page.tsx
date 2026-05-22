@@ -44,7 +44,7 @@ export default async function AdminDashboard() {
     getRecentSites(),
   ]);
 
-  const name = adminDisplayName(user ?? { user_metadata: {}, email: null });
+  const name = adminDisplayName(user ?? { user_metadata: {} });
 
   return (
     <div className="space-y-8 p-8">

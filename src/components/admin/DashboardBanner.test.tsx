@@ -8,6 +8,11 @@ describe("DashboardBanner", () => {
     expect(screen.getByText(/^Good (Morning|Afternoon|Evening), James!$/)).toBeInTheDocument();
   });
 
+  it("shows only the greeting when there is no name", () => {
+    render(<DashboardBanner name={null} totalSites={42} addedThisWeek={3} />);
+    expect(screen.getByText(/^Good (Morning|Afternoon|Evening)!$/)).toBeInTheDocument();
+  });
+
   it("summarises the directory size", () => {
     render(<DashboardBanner name="James" totalSites={42} addedThisWeek={3} />);
     expect(screen.getByText(/42 websites/)).toBeInTheDocument();
