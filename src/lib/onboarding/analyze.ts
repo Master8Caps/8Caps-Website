@@ -13,8 +13,11 @@ pages. Produce an accurate, concise, professional listing. Rules:
 - "shortSummary" is one clear sentence.
 - "fullOverview" is 2-3 short paragraphs.
 - "services" lists the concrete services or features the site offers.
-- Choose the single best-fitting category SLUG from the provided list, or null \
-if none genuinely fits.
+- For the category: strongly prefer an existing category — set \
+"suggestedCategorySlug" to the best-fitting slug from the provided list. Only \
+if no existing category genuinely fits, leave "suggestedCategorySlug" null and \
+set "suggestedNewCategory" to a short, broad, reusable category name (e.g. \
+"Trades", not "Emergency Plumbing in Leeds"). Never set both.
 - Choose only genuinely relevant tag SLUGs from the provided list.
 - "suggestedSlug" is a lowercase, hyphenated slug derived from the site name.
 - "confidence" reflects how well the page content supported the analysis.
@@ -34,6 +37,11 @@ const TOOL: Anthropic.Tool = {
       suggestedCategorySlug: {
         type: ["string", "null"],
         description: "Best-fitting category slug from the supplied list, or null",
+      },
+      suggestedNewCategory: {
+        type: ["string", "null"],
+        description:
+          "A new broad category name when no existing category fits, else null",
       },
       suggestedTagSlugs: {
         type: "array",
@@ -63,6 +71,7 @@ const TOOL: Anthropic.Tool = {
       "fullOverview",
       "targetAudience",
       "suggestedCategorySlug",
+      "suggestedNewCategory",
       "suggestedTagSlugs",
       "services",
       "seoTitle",
