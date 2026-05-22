@@ -22,7 +22,6 @@ export default function Icon() {
           alignItems: "center",
           justifyContent: "center",
           background: "#002147",
-          borderRadius: 14,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
