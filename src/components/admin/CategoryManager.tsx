@@ -93,7 +93,7 @@ function CategoryRow({
       </span>
       <button
         type="button"
-        disabled={disabled || name.trim() === category.name}
+        disabled={disabled || !name.trim() || name.trim() === category.name}
         onClick={() => onRename(name.trim())}
         className="rounded-lg border px-3 py-2 text-sm font-medium text-ink disabled:opacity-60"
         style={fieldStyle}
@@ -101,7 +101,7 @@ function CategoryRow({
         Rename
       </button>
 
-      <span className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-2">
         <select
           value={mergeTarget}
           onChange={(e) => setMergeTarget(e.target.value)}
@@ -151,7 +151,7 @@ function CategoryRow({
         >
           Delete
         </button>
-      </span>
+      </div>
     </div>
   );
 }
