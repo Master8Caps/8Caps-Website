@@ -20,7 +20,7 @@ export function DashboardBanner({
           className="text-2xl font-bold text-white"
           style={{ fontFamily: "var(--font-heading)" }}
         >
-          {greeting}, {name}
+          {greeting}, {name}!
         </h1>
         <p className="mt-1 text-sm text-accent-soft">
           {totalSites} {sitesWord} in the directory · {addedThisWeek} added this

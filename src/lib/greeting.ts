@@ -1,8 +1,8 @@
 /** A time-of-day greeting for the given 24-hour hour. */
 export function greetingFor(hour: number): string {
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
+  if (hour < 12) return "Good Morning";
+  if (hour < 18) return "Good Afternoon";
+  return "Good Evening";
 }
 
 interface UserLike {
@@ -15,7 +15,7 @@ interface UserLike {
 
 /**
  * The friendliest available name for an admin user: their Supabase display
- * name, else the local-part of their email, else "there".
+ * name, else the (capitalised) local-part of their email, else "there".
  */
 export function adminDisplayName(user: UserLike): string {
   const meta = user.user_metadata ?? {};
@@ -24,5 +24,6 @@ export function adminDisplayName(user: UserLike): string {
     return candidate.trim();
   }
   const local = (user.email ?? "").split("@")[0];
-  return local || "there";
+  if (!local) return "there";
+  return local.charAt(0).toUpperCase() + local.slice(1);
 }
