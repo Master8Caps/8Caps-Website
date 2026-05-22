@@ -4,9 +4,12 @@ export interface AnalysisResult {
   shortSummary: string;
   fullOverview: string;
   targetAudience: string;
-  /** A slug from the existing category list, or null if none fits. */
+  /**
+   * The category for this site. At most one of these is non-null: an existing
+   * category slug, or a proposed new category name when none of the existing
+   * categories fit. Both null means no category applies.
+   */
   suggestedCategorySlug: string | null;
-  /** A proposed new category name when no existing category fits, else null. */
   suggestedNewCategory: string | null;
   /** Slugs from the existing tag list. */
   suggestedTagSlugs: string[];
