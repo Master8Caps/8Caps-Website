@@ -136,6 +136,12 @@ export function UrlAnalyzer({
             <span className="font-semibold">AI confidence:</span>{" "}
             <span className="capitalize">{analysis.confidence}</span>
           </p>
+          {analysis.suggestedNewCategory && (
+            <p className="mt-1 text-ink-muted">
+              <span className="font-semibold">New category proposed:</span>{" "}
+              {analysis.suggestedNewCategory}
+            </p>
+          )}
           {analysis.notes && (
             <p className="mt-1 text-ink-muted">
               <span className="font-semibold">Notes:</span> {analysis.notes}
