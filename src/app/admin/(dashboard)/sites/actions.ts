@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { siteFormSchema } from "@/lib/schemas";
+import { slugify } from "@/lib/slugify";
 import type { ActionResult, SiteFormValues } from "@/types/domain";
 
 /**
@@ -92,6 +93,45 @@ function toSiteRow(values: SiteFormValues) {
   };
 }
 
+type CategoryResolution =
+  | { ok: true; categoryId: string | null }
+  | { ok: false; error: string };
+
+/**
+ * Decide a site's `category_id`. An explicit `categoryId` wins. Otherwise a
+ * `newCategoryName` is matched case-insensitively to an existing category, or
+ * a fresh category is created with a slug frozen at creation time.
+ */
+async function resolveCategoryId(
+  supabase: Awaited<ReturnType<typeof createServerSupabase>>,
+  values: SiteFormValues,
+): Promise<CategoryResolution> {
+  if (values.categoryId) {
+    return { ok: true, categoryId: values.categoryId };
+  }
+  const name = values.newCategoryName?.trim();
+  if (!name) return { ok: true, categoryId: null };
+
+  const existing = await supabase
+    .from("categories")
+    .select("id")
+    .ilike("name", name)
+    .limit(1)
+    .maybeSingle();
+  if (existing.error) return { ok: false, error: existing.error.message };
+  if (existing.data) return { ok: true, categoryId: existing.data.id };
+
+  const created = await supabase
+    .from("categories")
+    .insert({ name, slug: slugify(name) })
+    .select("id")
+    .single();
+  if (created.error) {
+    return { ok: false, error: `Could not create category: ${created.error.message}` };
+  }
+  return { ok: true, categoryId: created.data.id };
+}
+
 export async function createSite(values: SiteFormValues): Promise<ActionResult> {
   const parsed = siteFormSchema.safeParse(values);
   if (!parsed.success) {
@@ -99,9 +139,12 @@ export async function createSite(values: SiteFormValues): Promise<ActionResult> 
   }
 
   const supabase = await createServerSupabase();
+  const category = await resolveCategoryId(supabase, parsed.data);
+  if (!category.ok) return { ok: false, error: category.error };
+
   const { data, error } = await supabase
     .from("sites")
-    .insert(toSiteRow(parsed.data))
+    .insert({ ...toSiteRow(parsed.data), category_id: category.categoryId })
     .select("id")
     .single();
 
@@ -128,9 +171,12 @@ export async function updateSite(
   }
 
   const supabase = await createServerSupabase();
+  const category = await resolveCategoryId(supabase, parsed.data);
+  if (!category.ok) return { ok: false, error: category.error };
+
   const { error } = await supabase
     .from("sites")
-    .update(toSiteRow(parsed.data))
+    .update({ ...toSiteRow(parsed.data), category_id: category.categoryId })
     .eq("id", id);
 
   if (error) {

@@ -124,6 +124,7 @@ export async function getSiteForEdit(
     fullOverview: row.full_overview ?? "",
     targetAudience: row.target_audience ?? "",
     categoryId: row.category_id,
+    newCategoryName: null,
     publishStatus: row.publish_status,
     lifecycle: row.lifecycle,
     visibility: row.visibility,
