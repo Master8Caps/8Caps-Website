@@ -1,5 +1,6 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import type {
+  AdminCategory,
   AdminSiteRow,
   Category,
   DashboardStats,
@@ -150,13 +151,28 @@ export async function getAllTags(): Promise<Tag[]> {
   return (data ?? []) as Tag[];
 }
 
-/** All categories, alphabetical. */
-export async function getAdminCategories(): Promise<Category[]> {
+interface AdminCategoryRaw {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  sites: { count: number }[];
+}
+
+/** All categories with their site counts, alphabetical. */
+export async function getAdminCategories(): Promise<AdminCategory[]> {
   const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("categories")
-    .select("id, name, slug, description")
+    .select("id, name, slug, description, sites (count)")
     .order("name");
   if (error) throw new Error(`Failed to load categories: ${error.message}`);
-  return (data ?? []) as Category[];
+
+  return ((data ?? []) as unknown as AdminCategoryRaw[]).map((c) => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+    description: c.description,
+    siteCount: c.sites[0]?.count ?? 0,
+  }));
 }
