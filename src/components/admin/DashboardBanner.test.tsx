@@ -3,9 +3,9 @@ import { render, screen } from "@testing-library/react";
 import { DashboardBanner } from "./DashboardBanner";
 
 describe("DashboardBanner", () => {
-  it("greets the named user", () => {
+  it("greets the named user with a capitalised greeting and exclamation", () => {
     render(<DashboardBanner name="James" totalSites={42} addedThisWeek={3} />);
-    expect(screen.getByText(/James/)).toBeInTheDocument();
+    expect(screen.getByText(/^Good (Morning|Afternoon|Evening), James!$/)).toBeInTheDocument();
   });
 
   it("summarises the directory size", () => {
