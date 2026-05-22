@@ -86,6 +86,7 @@ export interface SiteFormValues {
   fullOverview: string;
   targetAudience: string;
   categoryId: string | null;
+  newCategoryName: string | null;
   publishStatus: PublishStatus;
   lifecycle: SiteLifecycle;
   visibility: SiteVisibility;
@@ -116,10 +117,24 @@ export interface DashboardStats {
   publishedSites: number;
   draftSites: number;
   categories: number;
+  sitesAddedThisWeek: number;
 }
 
 /** Result returned by a Server Action on the validation / DB-error path. */
 export interface ActionResult {
   ok: boolean;
   error?: string;
+}
+
+/** A category with its site count, for the admin tidy-up tool. */
+export interface AdminCategory extends Category {
+  siteCount: number;
+}
+
+/** A site row in the dashboard "recently added" panel. */
+export interface RecentSite {
+  id: string;
+  name: string;
+  publishStatus: PublishStatus;
+  categoryName: string | null;
 }

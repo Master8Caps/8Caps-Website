@@ -22,6 +22,7 @@ export const siteFormSchema = z.object({
   fullOverview: z.string(),
   targetAudience: z.string(),
   categoryId: z.string().uuid().nullable(),
+  newCategoryName: z.string().nullable(),
   publishStatus: z.enum(["draft", "published", "archived"]),
   lifecycle: z.enum(["live", "coming_soon"]),
   visibility: z.enum(["public", "private"]),
@@ -33,14 +34,8 @@ export const siteFormSchema = z.object({
   tagIds: z.array(z.string().uuid()),
 });
 
-export const categorySchema = z.object({
+export const categoryRenameSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  slug: z
-    .string()
-    .min(1, "Slug is required")
-    .regex(/^[a-z0-9-]+$/, "Slug may only contain lowercase letters, numbers and hyphens"),
-  description: z.string(),
 });
 
 export type SiteFormInput = z.infer<typeof siteFormSchema>;
-export type CategoryInput = z.infer<typeof categorySchema>;

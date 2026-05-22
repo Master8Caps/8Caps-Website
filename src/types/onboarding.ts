@@ -6,6 +6,8 @@ export interface AnalysisResult {
   targetAudience: string;
   /** A slug from the existing category list, or null if none fits. */
   suggestedCategorySlug: string | null;
+  /** A proposed new category name when no existing category fits, else null. */
+  suggestedNewCategory: string | null;
   /** Slugs from the existing tag list. */
   suggestedTagSlugs: string[];
   services: { name: string; description: string }[];

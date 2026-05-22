@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { siteFormSchema, categorySchema } from "./schemas";
+import { siteFormSchema, categoryRenameSchema } from "./schemas";
 
 const validSite = {
   name: "Test Site",
@@ -10,6 +10,7 @@ const validSite = {
   fullOverview: "",
   targetAudience: "",
   categoryId: null,
+  newCategoryName: null,
   publishStatus: "draft",
   lifecycle: "live",
   visibility: "public",
@@ -52,21 +53,30 @@ describe("siteFormSchema", () => {
   });
 });
 
-describe("categorySchema", () => {
-  it("accepts a valid category", () => {
+describe("siteFormSchema — newCategoryName", () => {
+  it("accepts a string newCategoryName", () => {
     expect(
-      categorySchema.safeParse({
-        name: "Automation",
-        slug: "automation",
-        description: "",
-      }).success,
+      siteFormSchema.safeParse({ ...validSite, newCategoryName: "Trades" })
+        .success,
     ).toBe(true);
   });
 
-  it("rejects an empty name", () => {
+  it("accepts a null newCategoryName", () => {
     expect(
-      categorySchema.safeParse({ name: "", slug: "x", description: "" })
+      siteFormSchema.safeParse({ ...validSite, newCategoryName: null })
         .success,
-    ).toBe(false);
+    ).toBe(true);
+  });
+});
+
+describe("categoryRenameSchema", () => {
+  it("accepts a non-empty name", () => {
+    expect(categoryRenameSchema.safeParse({ name: "Trades" }).success).toBe(
+      true,
+    );
+  });
+
+  it("rejects an empty name", () => {
+    expect(categoryRenameSchema.safeParse({ name: "" }).success).toBe(false);
   });
 });
