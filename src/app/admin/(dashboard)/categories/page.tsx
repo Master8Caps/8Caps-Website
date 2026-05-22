@@ -8,7 +8,8 @@ export default async function AdminCategoriesPage() {
     <div className="p-8">
       <h1 className="text-2xl font-bold text-ink">Categories</h1>
       <p className="mt-1 text-sm text-ink-muted">
-        Manage the categories websites can be filed under.
+        Categories are assigned automatically as you add websites. Use this page
+        to rename, merge duplicates, or remove ones you don&apos;t need.
       </p>
       <div className="mt-6">
         <CategoryManager categories={categories} />
