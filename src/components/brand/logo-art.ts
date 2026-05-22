@@ -6,9 +6,9 @@ const CAP_CROWN_BOTTOM_Y = 66; // cap-native y where the crown meets the head
 const CAP_ANCHOR_X = 89; // cap-native x of the crown centre
 
 // ── Tunable composition constants — adjust if the cap does not sit naturally.
-const CAP_WIDTH_RATIO = 1.16; // cap width as a multiple of the "8" width
-const CAP_OVERLAP = 70; // glyph units the crown base sits down into the "8"
-const PAD = 36; // viewBox padding around the artwork
+const CAP_WIDTH_RATIO = 2.15; // cap width as a multiple of the "8" width
+const CAP_OVERLAP = 148; // glyph units the crown base sits down into the "8"
+const PAD = 40; // viewBox padding around the artwork
 
 function r(n: number): number {
   return Math.round(n * 100) / 100;
@@ -22,7 +22,7 @@ const capCenterX = EIGHT_BOX.x + EIGHT_BOX.w / 2;
 const capTx = capCenterX - CAP_ANCHOR_X * capScale;
 const capTy = CAP_OVERLAP - CAP_CROWN_BOTTOM_Y * capScale;
 // Topmost artwork ≈ cap-native y 14 (the button), scaled into glyph space.
-const artTop = capTy + 14 * capScale - PAD;
+const artTop = capTy + 6 * capScale - PAD;
 
 const CAP_MARKUP =
   `<g transform="translate(${r(capTx)} ${r(capTy)}) ` +
