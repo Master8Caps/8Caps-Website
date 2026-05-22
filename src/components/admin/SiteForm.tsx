@@ -40,6 +40,7 @@ const EMPTY: SiteFormValues = {
 const field = "w-full rounded-lg border px-3 py-2 text-sm";
 const fieldStyle = { borderColor: "var(--color-hairline)" };
 const sectionTitle = "text-sm font-semibold uppercase tracking-wide text-ink-muted";
+const NEW_CATEGORY = "__new_category__";
 
 export function SiteForm({
   initial,
@@ -62,7 +63,6 @@ export function SiteForm({
   const [proposedCategory, setProposedCategory] = useState<string | null>(
     initial?.newCategoryName ?? null,
   );
-  const NEW_CATEGORY = "__new_category__";
 
   function set<K extends keyof SiteFormValues>(key: K, value: SiteFormValues[K]) {
     setValues((v) => ({ ...v, [key]: value }));
