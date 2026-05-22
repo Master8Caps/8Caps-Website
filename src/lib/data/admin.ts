@@ -1,8 +1,10 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import type {
+  AdminCategory,
   AdminSiteRow,
   Category,
   DashboardStats,
+  RecentSite,
   SiteFormValues,
   Tag,
 } from "@/types/domain";
@@ -51,7 +53,9 @@ export async function getAdminSites(search?: string): Promise<AdminSiteRow[]> {
 export async function getDashboardStats(): Promise<DashboardStats> {
   const supabase = await createServerSupabase();
 
-  const [total, published, draft, categories] = await Promise.all([
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const [total, published, draft, categories, thisWeek] = await Promise.all([
     supabase.from("sites").select("id", { count: "exact", head: true }),
     supabase
       .from("sites")
@@ -62,6 +66,10 @@ export async function getDashboardStats(): Promise<DashboardStats> {
       .select("id", { count: "exact", head: true })
       .eq("publish_status", "draft"),
     supabase.from("categories").select("id", { count: "exact", head: true }),
+    supabase
+      .from("sites")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", weekAgo),
   ]);
 
   return {
@@ -69,6 +77,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     publishedSites: published.count ?? 0,
     draftSites: draft.count ?? 0,
     categories: categories.count ?? 0,
+    sitesAddedThisWeek: thisWeek.count ?? 0,
   };
 }
 
@@ -123,6 +132,7 @@ export async function getSiteForEdit(
     fullOverview: row.full_overview ?? "",
     targetAudience: row.target_audience ?? "",
     categoryId: row.category_id,
+    newCategoryName: null,
     publishStatus: row.publish_status,
     lifecycle: row.lifecycle,
     visibility: row.visibility,
@@ -150,13 +160,53 @@ export async function getAllTags(): Promise<Tag[]> {
   return (data ?? []) as Tag[];
 }
 
-/** All categories, alphabetical. */
-export async function getAdminCategories(): Promise<Category[]> {
+interface AdminCategoryRaw {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  sites: { count: number }[];
+}
+
+/** All categories with their site counts, alphabetical. */
+export async function getAdminCategories(): Promise<AdminCategory[]> {
   const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("categories")
-    .select("id, name, slug, description")
+    .select("id, name, slug, description, sites (count)")
     .order("name");
   if (error) throw new Error(`Failed to load categories: ${error.message}`);
-  return (data ?? []) as Category[];
+
+  return ((data ?? []) as unknown as AdminCategoryRaw[]).map((c) => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+    description: c.description,
+    siteCount: c.sites[0]?.count ?? 0,
+  }));
+}
+
+interface RecentSiteRaw {
+  id: string;
+  name: string;
+  publish_status: RecentSite["publishStatus"];
+  category: { name: string } | null;
+}
+
+/** The most recently created sites, newest first — for the dashboard feed. */
+export async function getRecentSites(limit = 5): Promise<RecentSite[]> {
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("sites")
+    .select("id, name, publish_status, category:categories (name)")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw new Error(`Failed to load recent sites: ${error.message}`);
+
+  return ((data ?? []) as unknown as RecentSiteRaw[]).map((r) => ({
+    id: r.id,
+    name: r.name,
+    publishStatus: r.publish_status,
+    categoryName: r.category?.name ?? null,
+  }));
 }

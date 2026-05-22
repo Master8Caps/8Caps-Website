@@ -25,6 +25,7 @@ const EMPTY: SiteFormValues = {
   fullOverview: "",
   targetAudience: "",
   categoryId: null,
+  newCategoryName: null,
   publishStatus: "draft",
   lifecycle: "live",
   visibility: "public",
@@ -39,6 +40,7 @@ const EMPTY: SiteFormValues = {
 const field = "w-full rounded-lg border px-3 py-2 text-sm";
 const fieldStyle = { borderColor: "var(--color-hairline)" };
 const sectionTitle = "text-sm font-semibold uppercase tracking-wide text-ink-muted";
+const NEW_CATEGORY = "__new_category__";
 
 export function SiteForm({
   initial,
@@ -58,6 +60,13 @@ export function SiteForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const { upload, uploading } = useUpload();
+  // `proposedCategory` keeps the AI's proposed new category available as a
+  // dropdown option even after the admin toggles to an existing category.
+  // It must stay in sync with `values.newCategoryName` — both are set together
+  // in `applyAnalysis`; the select's onChange only ever moves between them.
+  const [proposedCategory, setProposedCategory] = useState<string | null>(
+    initial?.newCategoryName ?? null,
+  );
 
   function set<K extends keyof SiteFormValues>(key: K, value: SiteFormValues[K]) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -95,6 +104,7 @@ export function SiteForm({
     const category = categories.find(
       (c) => c.slug === result.suggestedCategorySlug,
     );
+    setProposedCategory(result.suggestedNewCategory);
     const tagIds = allTags
       .filter((t) => result.suggestedTagSlugs.includes(t.slug))
       .map((t) => t.id);
@@ -108,7 +118,8 @@ export function SiteForm({
       shortSummary: result.shortSummary,
       fullOverview: result.fullOverview,
       targetAudience: result.targetAudience,
-      categoryId: category?.id ?? v.categoryId,
+      categoryId: category?.id ?? null,
+      newCategoryName: result.suggestedNewCategory,
       seoTitle: result.seoTitle,
       seoDescription: result.seoDescription,
       services: result.services,
@@ -207,12 +218,34 @@ export function SiteForm({
       <section className="space-y-3">
         <h2 className={sectionTitle}>Classification</h2>
         <select
-          value={values.categoryId ?? ""}
-          onChange={(e) => set("categoryId", e.target.value || null)}
+          value={
+            values.newCategoryName ? NEW_CATEGORY : values.categoryId ?? ""
+          }
+          onChange={(e) => {
+            const v = e.target.value;
+            if (v === NEW_CATEGORY) {
+              setValues((prev) => ({
+                ...prev,
+                categoryId: null,
+                newCategoryName: proposedCategory,
+              }));
+            } else {
+              setValues((prev) => ({
+                ...prev,
+                categoryId: v || null,
+                newCategoryName: null,
+              }));
+            }
+          }}
           className={field}
           style={fieldStyle}
         >
           <option value="">No category</option>
+          {proposedCategory && (
+            <option value={NEW_CATEGORY}>
+              ✨ {proposedCategory} — new category
+            </option>
+          )}
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
               {c.name}
