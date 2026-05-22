@@ -7,7 +7,7 @@ const CAP_ANCHOR_X = 89; // cap-native x of the crown centre
 
 // ── Tunable composition constants — adjust if the cap does not sit naturally.
 const CAP_WIDTH_RATIO = 2.15; // cap width as a multiple of the "8" width
-const CAP_OVERLAP = 40; // glyph units the crown base sits down into the "8"
+const CAP_OVERLAP = 8; // glyph units the crown base sits down into the "8"
 const PAD = 40; // viewBox padding around the artwork
 
 function r(n: number): number {
