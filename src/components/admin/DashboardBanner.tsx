@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { greetingFor, londonHour } from "@/lib/greeting";
+import { londonHour } from "@/lib/greeting";
+import { Greeting } from "./Greeting";
 
 export function DashboardBanner({
   name,
@@ -10,7 +11,6 @@ export function DashboardBanner({
   totalSites: number;
   addedThisWeek: number;
 }) {
-  const greeting = greetingFor(londonHour());
   const sitesWord = totalSites === 1 ? "website" : "websites";
 
   return (
@@ -20,7 +20,7 @@ export function DashboardBanner({
           className="text-2xl font-bold text-white"
           style={{ fontFamily: "var(--font-heading)" }}
         >
-          {name ? `${greeting}, ${name}!` : `${greeting}!`}
+          <Greeting name={name} fallbackHour={londonHour()} />
         </h1>
         <p className="mt-1 text-sm text-accent-soft">
           {totalSites} {sitesWord} in the directory · {addedThisWeek} added this
