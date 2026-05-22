@@ -1,6 +1,6 @@
 import { EIGHT_PATH, CAPS_PATH, EIGHT_BOX, LOCKUP_BOX } from "./logo-glyphs";
 
-// ── Cap geometry — native space is viewBox "0 0 178 100" (the approved mockup).
+// Cap geometry — drawn in its own ~178-wide native coordinate space.
 const CAP_NATIVE_WIDTH = 178;
 const CAP_CROWN_BOTTOM_Y = 66; // cap-native y where the crown meets the head
 const CAP_ANCHOR_X = 89; // cap-native x of the crown centre
@@ -21,7 +21,7 @@ const capCenterX = EIGHT_BOX.x + EIGHT_BOX.w / 2;
 // (capCenterX, CAP_OVERLAP) in glyph space.
 const capTx = capCenterX - CAP_ANCHOR_X * capScale;
 const capTy = CAP_OVERLAP - CAP_CROWN_BOTTOM_Y * capScale;
-// Topmost artwork ≈ cap-native y 14 (the button), scaled into glyph space.
+// Topmost artwork ≈ cap-native y 16 (the button), scaled into glyph space.
 const artTop = capTy + 16 * capScale - PAD;
 
 const CAP_MARKUP =
@@ -38,7 +38,6 @@ const left = r(EIGHT_BOX.x - PAD);
 const top = r(artTop);
 const bottom = EIGHT_BOX.y + EIGHT_BOX.h + PAD;
 
-/** viewBox for the mark alone (capped "8"). */
 /** The mark artwork's intrinsic width and height (viewBox units). */
 export const MARK_WIDTH = r(EIGHT_BOX.w + 2 * PAD);
 export const MARK_HEIGHT = r(bottom - top);
