@@ -5,25 +5,33 @@ export function greetingFor(hour: number): string {
   return "Good Evening";
 }
 
+/** The current hour (0-23) in UK time, regardless of where the server runs. */
+export function londonHour(date: Date = new Date()): number {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    hour: "numeric",
+    hourCycle: "h23",
+  }).formatToParts(date);
+  const hour = parts.find((p) => p.type === "hour")?.value ?? "0";
+  return parseInt(hour, 10) % 24;
+}
+
 interface UserLike {
   user_metadata?: {
     display_name?: unknown;
     full_name?: unknown;
   } | null;
-  email?: string | null;
 }
 
 /**
- * The friendliest available name for an admin user: their Supabase display
- * name, else the (capitalised) local-part of their email, else "there".
+ * The admin user's Supabase display name, or null when they have not set one.
+ * Callers show just the greeting (no name) when this is null.
  */
-export function adminDisplayName(user: UserLike): string {
+export function adminDisplayName(user: UserLike): string | null {
   const meta = user.user_metadata ?? {};
   const candidate = meta.display_name ?? meta.full_name;
   if (typeof candidate === "string" && candidate.trim()) {
     return candidate.trim();
   }
-  const local = (user.email ?? "").split("@")[0];
-  if (!local) return "there";
-  return local.charAt(0).toUpperCase() + local.slice(1);
+  return null;
 }
