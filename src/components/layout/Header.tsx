@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "./Container";
+import { Logo } from "@/components/brand/Logo";
 
 const NAV = [
   { href: "/sites", label: "Directory" },
@@ -10,12 +11,8 @@ export function Header() {
   return (
     <header className="border-b border-white/10 bg-oxford">
       <Container className="flex h-16 items-center justify-between">
-        <Link
-          href="/"
-          className="font-heading text-lg font-bold tracking-tight text-white"
-          style={{ fontFamily: "var(--font-heading)" }}
-        >
-          8Caps
+        <Link href="/" className="flex items-center">
+          <Logo variant="lockup" className="h-7 w-auto" />
         </Link>
         <nav className="flex items-center gap-6 text-sm">
           {NAV.map((item) => (

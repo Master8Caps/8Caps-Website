@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { logout } from "@/app/admin/actions";
+import { Logo } from "@/components/brand/Logo";
 
 const NAV = [
   { href: "/admin", label: "Dashboard" },
@@ -12,12 +13,11 @@ export function Sidebar({ email }: { email: string }) {
   return (
     <aside className="flex w-60 shrink-0 flex-col bg-oxford text-white">
       <div className="border-b border-white/10 p-5">
-        <Link
-          href="/admin"
-          className="text-lg font-bold"
-          style={{ fontFamily: "var(--font-heading)" }}
-        >
-          8Caps Admin
+        <Link href="/admin" className="flex items-center gap-2">
+          <Logo variant="lockup" className="h-6 w-auto" />
+          <span className="text-xs font-semibold uppercase tracking-wide text-white/55">
+            Admin
+          </span>
         </Link>
       </div>
       <nav className="flex-1 space-y-1 p-3">
