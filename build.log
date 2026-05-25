@@ -1,0 +1,28 @@
+
+> 8caps-website@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\James\OneDrive\Documents\SaaS Products\8Caps\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\James\OneDrive\Documents\SaaS Products\8Caps\.claude\worktrees\agency-repositioning\package-lock.json
+
+▲ Next.js 16.2.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 21.5s
+  Running TypeScript ...
+  Finished TypeScript in 19.5s ...
+  Collecting page data using 3 workers ...
+Error: Failed to load slugs: TypeError: fetch failed
+    at l (C:\Users\James\OneDrive\Documents\SaaS Products\8Caps\.claude\worktrees\agency-repositioning\.next\server\chunks\ssr\_claude_worktrees_agency-repositioning_0so-1w-._.js:3:4857)
+    at async m (C:\Users\James\OneDrive\Documents\SaaS Products\8Caps\.claude\worktrees\agency-repositioning\.next\server\chunks\ssr\[root-of-the-server]__0r02l_p._.js:1:13787)
+
+> Build error occurred
+Error: Failed to collect page data for /sites/[slug]
+    at ignore-listed frames {
+  type: 'Error'
+}

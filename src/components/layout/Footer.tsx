@@ -11,7 +11,7 @@ export function Footer() {
           <p>© {new Date().getFullYear()} 8Caps. All rights reserved.</p>
         </div>
         <div className="flex gap-5">
-          <Link href="/sites" className="hover:text-white transition-colors">Directory</Link>
+          <Link href="/products" className="hover:text-white transition-colors">Products</Link>
           <Link href="/about" className="hover:text-white transition-colors">About</Link>
           <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
         </div>

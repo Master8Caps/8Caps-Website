@@ -44,7 +44,7 @@ export default async function HomePage() {
             Explore everything we offer in one place.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/sites">Explore our services</ButtonLink>
+            <ButtonLink href="/products">Explore our services</ButtonLink>
             <ButtonLink href="/contact" variant="secondary">
               Contact 8Caps
             </ButtonLink>
@@ -73,7 +73,7 @@ export default async function HomePage() {
               return (
                 <Link
                   key={c.id}
-                  href={`/sites?category=${c.slug}`}
+                  href={`/products?category=${c.slug}`}
                   className="rounded-card border bg-surface p-5 hover:shadow-md transition-shadow"
                   style={{ borderColor: "var(--color-hairline)" }}
                 >

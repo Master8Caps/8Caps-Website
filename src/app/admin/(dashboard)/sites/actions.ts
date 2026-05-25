@@ -14,8 +14,8 @@ import type { ActionResult, SiteFormValues } from "@/types/domain";
  */
 function revalidatePublic() {
   revalidatePath("/");
-  revalidatePath("/sites");
-  revalidatePath("/sites/[slug]", "page");
+  revalidatePath("/products");
+  revalidatePath("/products/[slug]", "page");
 }
 
 /** Replace a site's child rows (services, screenshots, tags). */

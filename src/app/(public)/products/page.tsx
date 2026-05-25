@@ -47,7 +47,7 @@ export default async function DirectoryPage({
       <section className="bg-surface py-10">
         <Container>
           {/* Search */}
-          <form action="/sites" method="get" className="flex gap-3">
+          <form action="/products" method="get" className="flex gap-3">
             <input
               type="search"
               name="q"

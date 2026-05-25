@@ -18,7 +18,7 @@ export function CategoryFilter({
     if (lifecycle) params.set("lifecycle", lifecycle);
     if (categorySlug) params.set("category", categorySlug);
     const qs = params.toString();
-    return qs ? `/sites?${qs}` : "/sites";
+    return qs ? `/products?${qs}` : "/products";
   }
 
   const base = "rounded-full px-3 py-1.5 text-sm font-medium transition-colors";
