@@ -2,18 +2,30 @@ import type { MetadataRoute } from "next";
 import { getAllSiteSlugs } from "@/lib/data/sites";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const slugs = await getAllSiteSlugs();
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const productSlugs = await getAllSiteSlugs();
 
-  const staticRoutes = ["", "/products", "/about", "/contact"].map((path) => ({
-    url: `${base}${path}`,
-    lastModified: new Date(),
+  const now = new Date();
+
+  const staticPaths: string[] = [
+    "/",
+    "/services",
+    "/work",
+    "/products",
+    "/about",
+    "/contact",
+    "/privacy",
+  ];
+
+  const staticEntries: MetadataRoute.Sitemap = staticPaths.map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: now,
   }));
 
-  const siteRoutes = slugs.map((slug) => ({
-    url: `${base}/products/${slug}`,
-    lastModified: new Date(),
+  const productEntries: MetadataRoute.Sitemap = productSlugs.map((slug) => ({
+    url: `${baseUrl}/products/${slug}`,
+    lastModified: now,
   }));
 
-  return [...staticRoutes, ...siteRoutes];
+  return [...staticEntries, ...productEntries];
 }
