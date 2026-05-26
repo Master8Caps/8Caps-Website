@@ -2,9 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { getAdminBasePath } from "@/lib/admin-paths.server";
+import { adminPath } from "@/lib/admin-paths";
 
 export async function logout() {
   const supabase = await createServerSupabase();
   await supabase.auth.signOut();
-  redirect("/admin/login");
+  const basePath = await getAdminBasePath();
+  redirect(adminPath(basePath, "/login"));
 }

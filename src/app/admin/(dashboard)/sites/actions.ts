@@ -3,9 +3,16 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { getAdminBasePath } from "@/lib/admin-paths.server";
+import { adminPath } from "@/lib/admin-paths";
 import { siteFormSchema } from "@/lib/schemas";
 import { slugify } from "@/lib/slugify";
 import type { ActionResult, SiteFormValues } from "@/types/domain";
+
+async function sitesListHref(): Promise<string> {
+  const basePath = await getAdminBasePath();
+  return adminPath(basePath, "/sites");
+}
 
 /**
  * Revalidate every public route that could show site data. Uses the
@@ -158,7 +165,7 @@ export async function createSite(values: SiteFormValues): Promise<ActionResult> 
   }
 
   revalidatePublic();
-  redirect("/admin/sites");
+  redirect(await sitesListHref());
 }
 
 export async function updateSite(
@@ -189,7 +196,7 @@ export async function updateSite(
   }
 
   revalidatePublic();
-  redirect("/admin/sites");
+  redirect(await sitesListHref());
 }
 
 export async function deleteSite(id: string): Promise<ActionResult> {
@@ -199,5 +206,5 @@ export async function deleteSite(id: string): Promise<ActionResult> {
     return { ok: false, error: `Could not delete site: ${error.message}` };
   }
   revalidatePublic();
-  redirect("/admin/sites");
+  redirect(await sitesListHref());
 }

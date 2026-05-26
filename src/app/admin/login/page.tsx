@@ -4,6 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { Container } from "@/components/layout/Container";
+import { ADMIN_HOST } from "@/lib/host-routing";
+import { adminPath, type AdminBasePath } from "@/lib/admin-paths";
+
+function clientBasePath(): AdminBasePath {
+  if (typeof window === "undefined") return "/admin";
+  return window.location.hostname.toLowerCase() === ADMIN_HOST ? "" : "/admin";
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,7 +35,7 @@ export default function LoginPage() {
       setPending(false);
       return;
     }
-    router.push("/admin");
+    router.push(adminPath(clientBasePath(), "/"));
     router.refresh();
   }
 

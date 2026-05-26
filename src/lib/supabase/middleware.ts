@@ -1,12 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-/**
- * Refreshes the Supabase auth session on every request and guards /admin/*.
- * Unauthenticated requests to an /admin route (other than the login page)
- * are redirected to /admin/login.
- */
-export async function updateSession(request: NextRequest) {
+function makeSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -29,6 +24,24 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
+  return { supabase, getResponse: () => response };
+}
+
+function copyCookies(from: NextResponse, to: NextResponse) {
+  from.cookies.getAll().forEach(({ name, value, ...options }) => {
+    to.cookies.set(name, value, options);
+  });
+  return to;
+}
+
+/**
+ * Refreshes the Supabase auth session on every request and guards /admin/*.
+ * Used on the apex/dev/preview hosts where /admin/* still resolves directly.
+ * On the admin subdomain, see {@link updateAdminSubdomainSession}.
+ */
+export async function updateSession(request: NextRequest) {
+  const { supabase, getResponse } = makeSession(request);
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -40,15 +53,52 @@ export async function updateSession(request: NextRequest) {
   if (isAdminRoute && !isLoginRoute && !user) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/admin/login";
-    return NextResponse.redirect(redirectUrl);
+    return copyCookies(getResponse(), NextResponse.redirect(redirectUrl));
   }
 
-  // Already logged in and visiting the login page — send to the dashboard.
   if (isLoginRoute && user) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/admin";
-    return NextResponse.redirect(redirectUrl);
+    return copyCookies(getResponse(), NextResponse.redirect(redirectUrl));
   }
 
-  return response;
+  return getResponse();
+}
+
+/**
+ * Handles requests on the admin subdomain (admin.8caps.co.uk):
+ *   - Rewrites the URL onto /admin/* internally (browser keeps the clean path)
+ *   - Enforces auth using subdomain-local paths (`/login`, not `/admin/login`)
+ *   - Preserves any Supabase session cookies on the final response
+ */
+export async function updateAdminSubdomainSession(
+  request: NextRequest,
+  internalPath: string,
+) {
+  const { supabase, getResponse } = makeSession(request);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const isLoginRoute = internalPath === "/admin/login";
+
+  if (!isLoginRoute && !user) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/login";
+    return copyCookies(getResponse(), NextResponse.redirect(redirectUrl));
+  }
+
+  if (isLoginRoute && user) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/";
+    return copyCookies(getResponse(), NextResponse.redirect(redirectUrl));
+  }
+
+  const rewriteUrl = request.nextUrl.clone();
+  rewriteUrl.pathname = internalPath;
+  return copyCookies(
+    getResponse(),
+    NextResponse.rewrite(rewriteUrl, { request }),
+  );
 }

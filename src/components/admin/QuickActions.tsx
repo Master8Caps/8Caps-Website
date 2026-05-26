@@ -1,13 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { useAdminPath } from "./AdminPathContext";
 
 const ACTIONS = [
-  { href: "/admin/sites/new", label: "Add website", primary: true },
-  { href: "/admin/sites", label: "Manage websites", primary: false },
-  { href: "/admin/categories", label: "Tidy categories", primary: false },
-  { href: "/admin/enquiries", label: "View enquiries", primary: false },
+  { path: "/sites/new", label: "Add website", primary: true },
+  { path: "/sites", label: "Manage websites", primary: false },
+  { path: "/categories", label: "Tidy categories", primary: false },
+  { path: "/enquiries", label: "View enquiries", primary: false },
 ];
 
 export function QuickActions() {
+  const adminHref = useAdminPath();
   return (
     <div
       className="rounded-card border bg-surface p-5"
@@ -17,8 +21,8 @@ export function QuickActions() {
       <div className="mt-3 flex flex-col gap-2">
         {ACTIONS.map((a) => (
           <Link
-            key={a.href}
-            href={a.href}
+            key={a.path}
+            href={adminHref(a.path)}
             className={
               a.primary
                 ? "rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-white"

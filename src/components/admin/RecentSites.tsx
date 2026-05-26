@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import type { RecentSite } from "@/types/domain";
+import { useAdminPath } from "./AdminPathContext";
 
 export function RecentSites({ sites }: { sites: RecentSite[] }) {
+  const adminHref = useAdminPath();
   return (
     <div
       className="rounded-card border bg-surface p-5"
@@ -10,7 +14,7 @@ export function RecentSites({ sites }: { sites: RecentSite[] }) {
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-ink">Recently added</h2>
         <Link
-          href="/admin/sites"
+          href={adminHref("/sites")}
           className="text-sm font-semibold text-accent"
         >
           View all →
@@ -28,7 +32,7 @@ export function RecentSites({ sites }: { sites: RecentSite[] }) {
               style={{ borderColor: "var(--color-hairline)" }}
             >
               <Link
-                href={`/admin/sites/${s.id}/edit`}
+                href={adminHref(`/sites/${s.id}/edit`)}
                 className="text-sm font-medium text-ink hover:text-accent"
               >
                 {s.name}

@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { getAdminBasePath } from "@/lib/admin-paths.server";
+import { adminPath } from "@/lib/admin-paths";
+import { AdminPathProvider } from "@/components/admin/AdminPathContext";
 import { Sidebar } from "@/components/admin/Sidebar";
 
 export default async function AdminLayout({
@@ -12,14 +15,18 @@ export default async function AdminLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  const basePath = await getAdminBasePath();
+
   // The login page renders without the shell; middleware already guards
   // routes, but if a non-logged-in request reaches the layout, bail out.
-  if (!user) redirect("/admin/login");
+  if (!user) redirect(adminPath(basePath, "/login"));
 
   return (
-    <div className="flex min-h-screen bg-surface-muted text-ink">
-      <Sidebar email={user.email ?? ""} />
-      <div className="flex-1 overflow-x-auto">{children}</div>
-    </div>
+    <AdminPathProvider basePath={basePath}>
+      <div className="flex min-h-screen bg-surface-muted text-ink">
+        <Sidebar email={user.email ?? ""} />
+        <div className="flex-1 overflow-x-auto">{children}</div>
+      </div>
+    </AdminPathProvider>
   );
 }

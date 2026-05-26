@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { londonHour } from "@/lib/greeting";
 import { Greeting } from "./Greeting";
+import { useAdminPath } from "./AdminPathContext";
 
 export function DashboardBanner({
   name,
@@ -12,6 +15,7 @@ export function DashboardBanner({
   addedThisWeek: number;
 }) {
   const sitesWord = totalSites === 1 ? "website" : "websites";
+  const adminHref = useAdminPath();
 
   return (
     <div className="band-surface flex flex-wrap items-center justify-between gap-4 rounded-card p-6">
@@ -28,7 +32,7 @@ export function DashboardBanner({
         </p>
       </div>
       <Link
-        href="/admin/sites/new"
+        href={adminHref("/sites/new")}
         className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
       >
         + Add a website

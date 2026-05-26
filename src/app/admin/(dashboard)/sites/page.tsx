@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getAdminSites } from "@/lib/data/admin";
+import { getAdminBasePath } from "@/lib/admin-paths.server";
+import { adminPath } from "@/lib/admin-paths";
 
 const STATUS_STYLE: Record<string, string> = {
   published: "bg-live-bg text-live",
@@ -13,14 +15,17 @@ export default async function AdminSitesPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q } = await searchParams;
-  const sites = await getAdminSites(q?.trim() || undefined);
+  const [sites, basePath] = await Promise.all([
+    getAdminSites(q?.trim() || undefined),
+    getAdminBasePath(),
+  ]);
 
   return (
     <div className="p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-ink">Websites</h1>
         <Link
-          href="/admin/sites/new"
+          href={adminPath(basePath, "/sites/new")}
           className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
         >
           Add a website
@@ -84,7 +89,7 @@ export default async function AdminSitesPage({
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Link
-                    href={`/admin/sites/${s.id}/edit`}
+                    href={adminPath(basePath, `/sites/${s.id}/edit`)}
                     className="font-semibold text-accent"
                   >
                     Edit
