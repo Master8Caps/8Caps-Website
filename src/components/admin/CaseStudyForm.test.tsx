@@ -29,11 +29,11 @@ describe("CaseStudyForm", () => {
     render(
       <CaseStudyForm initial={initial} onSubmit={async () => ({ ok: true })} />,
     );
-    expect(screen.getByText(/Basics/i)).toBeInTheDocument();
-    expect(screen.getByText(/Story/i)).toBeInTheDocument();
-    expect(screen.getByText(/Testimonial/i)).toBeInTheDocument();
-    expect(screen.getByText(/Classification/i)).toBeInTheDocument();
-    expect(screen.getByText(/Display/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Basics/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Story/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Testimonial/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Classification/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Display/i })).toBeInTheDocument();
   });
 
   it("shows the approval toggle off when testimonialApproved is false", () => {
