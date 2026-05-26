@@ -16,7 +16,7 @@ describe("QuickActions", () => {
       screen.getByRole("link", { name: /tidy categories/i }),
     ).toHaveAttribute("href", "/admin/categories");
     expect(
-      screen.getByRole("link", { name: /view enquiries/i }),
-    ).toHaveAttribute("href", "/admin/enquiries");
+      screen.getByRole("link", { name: /add case study/i }),
+    ).toHaveAttribute("href", "/admin/case-studies/new");
   });
 });

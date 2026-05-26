@@ -7,7 +7,7 @@ const ACTIONS = [
   { path: "/products/new", label: "Add product", primary: true },
   { path: "/products", label: "Manage products", primary: false },
   { path: "/categories", label: "Tidy categories", primary: false },
-  { path: "/enquiries", label: "View enquiries", primary: false },
+  { path: "/case-studies/new", label: "Add case study", primary: false },
 ];
 
 export function QuickActions() {
