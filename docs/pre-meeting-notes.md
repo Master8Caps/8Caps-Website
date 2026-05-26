@@ -104,6 +104,22 @@ For each of the three pillars on `/services`:
 - [ ] Confirm Oxford Blue + accent palette is locked, or open to a refresh from
       the `ui-ux-pro-max` skill
 
+### Products on `/products`
+
+The original Plan 1 seed inserted three placeholder products that are not real
+8Caps properties. They appear publicly on `/products` until archived. Run the
+following in the Supabase SQL editor so RLS hides them:
+
+```sql
+update sites
+   set publish_status = 'archived'
+ where slug in ('leadharbour', 'proptoolkit', 'stealth-project');
+```
+
+- [ ] Run the SQL above against the hosted database
+- [ ] Confirm `/products` no longer lists the three placeholders
+- [ ] Add any other genuine 8Caps products via the admin dashboard (`/admin/sites`)
+
 ---
 
 ## ⚠️ Priority order if time is tight

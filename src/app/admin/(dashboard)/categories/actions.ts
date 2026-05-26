@@ -7,7 +7,7 @@ import type { ActionResult } from "@/types/domain";
 
 function revalidateCategoryPages() {
   revalidatePath("/");
-  revalidatePath("/sites");
+  revalidatePath("/products");
   revalidatePath("/admin/categories");
 }
 

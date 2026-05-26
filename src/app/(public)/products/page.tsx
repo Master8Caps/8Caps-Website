@@ -10,8 +10,9 @@ import { parseDirectoryParams } from "@/lib/directory";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Directory",
-  description: "Browse every website, tool and service operated by 8Caps.",
+  title: "Our products",
+  description:
+    "The products 8Caps owns and operates — proof that we don't just build software, we run it.",
 };
 
 export default async function DirectoryPage({
@@ -35,10 +36,27 @@ export default async function DirectoryPage({
       {/* Compact dark Oxford Blue band — dot grid + subtler glow */}
       <section className="band-surface py-10 text-white">
         <Container>
-          <h1 className="text-3xl font-bold">Website directory</h1>
-          <p className="mt-2 text-white/65">
-            {result.total} {result.total === 1 ? "website" : "websites"} operated
-            by 8Caps.
+          <p className="text-sm font-semibold uppercase tracking-wide text-white/70">
+            Our own products
+          </p>
+          <h1 className="mt-3 text-3xl font-bold">
+            We don&rsquo;t just build software &mdash; we operate it.
+          </h1>
+          <p className="mt-4 max-w-3xl text-white/65">
+            Every project we ship for a client, we&rsquo;ve already lived ourselves.
+            These are the products 8Caps owns and runs in production &mdash;
+            practical tools solving real business problems.
+          </p>
+        </Container>
+      </section>
+
+      {/* Trust lead-in band */}
+      <section className="bg-surface py-6">
+        <Container>
+          <p className="max-w-3xl text-ink-muted">
+            What this means for your project &mdash; we know exactly what
+            &ldquo;shipped and running&rdquo; looks like, because we&rsquo;re doing
+            it every day.
           </p>
         </Container>
       </section>
@@ -47,7 +65,7 @@ export default async function DirectoryPage({
       <section className="bg-surface py-10">
         <Container>
           {/* Search */}
-          <form action="/sites" method="get" className="flex gap-3">
+          <form action="/products" method="get" className="flex gap-3">
             <input
               type="search"
               name="q"

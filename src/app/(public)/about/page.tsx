@@ -1,42 +1,68 @@
 import type { Metadata } from "next";
+import { Code, Sparkles, Workflow, Paintbrush } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { CTASection } from "@/components/marketing/CTASection";
-import { getCategories } from "@/lib/data/categories";
-import { getAllSiteSlugs } from "@/lib/data/sites";
+import { StatStrip } from "@/components/marketing/StatStrip";
+import { DisciplineCard } from "@/components/about/DisciplineCard";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "8Caps is a portfolio of digital services, platforms and specialist websites built to solve practical business problems.",
+    "8Caps is a UK studio building software, AI, and automation for SMBs. Established 2022.",
 };
 
-const APPROACH = [
+const DISCIPLINES = [
   {
-    title: "Built for a job",
-    body: "Every site in the portfolio is built around one clear problem and one clear audience — not a catch-all platform trying to do everything.",
+    icon: Code,
+    title: "Software engineering",
+    description:
+      "TypeScript, Next.js, React, Supabase, Postgres — modern, fast, maintainable.",
   },
   {
-    title: "Operated, not just launched",
-    body: "8Caps runs and maintains what it builds. These are working products with real users, not abandoned side projects.",
+    icon: Sparkles,
+    title: "AI engineering",
+    description:
+      "Claude API, prompt engineering, retrieval, AI voice agents, document AI.",
   },
   {
-    title: "Transparent by design",
-    body: "This directory exists so every product has a credible, verifiable home — easy to find, easy to check, easy to get in touch about.",
+    icon: Workflow,
+    title: "Automation engineering",
+    description:
+      "Make.com, n8n, Zapier, custom orchestration — workflows that don't break.",
+  },
+  {
+    icon: Paintbrush,
+    title: "Design & product",
+    description:
+      "Interface design, UX, brand — we don't ship ugly.",
   },
 ];
 
-export default async function AboutPage() {
-  const [categories, slugs] = await Promise.all([
-    getCategories(),
-    getAllSiteSlugs(),
-  ]);
+const HOW_WE_WORK = [
+  {
+    title: "Talk",
+    body: "We listen first, write a one-page brief, agree the shape and the price.",
+  },
+  {
+    title: "Build",
+    body: "Short iterations, you see progress every week, you steer along the way.",
+  },
+  {
+    title: "Operate",
+    body: "When it ships, we don't disappear. We run it, monitor it, keep it healthy.",
+  },
+];
 
+export default function AboutPage() {
+  // NOTE: these are placeholder numbers — replace with real counts once James
+  // confirms (see docs/pre-meeting-notes.md).
   const stats = [
-    { value: String(slugs.length), label: "Websites in the portfolio" },
-    { value: String(categories.length), label: "Service categories" },
-    { value: "100%", label: "Hand-reviewed before listing" },
+    { value: "Since 2022", label: "Building software & AI" },
+    { value: "20+", label: "Projects shipped" },
+    { value: "12+", label: "UK sectors served" },
+    { value: "6+", label: "Products operating" },
   ];
 
   return (
@@ -54,78 +80,75 @@ export default async function AboutPage() {
             About 8Caps
           </p>
           <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
-            A portfolio of digital services, under one roof.
+            A UK studio building software, AI, and automation for SMBs.
           </h1>
           <p className="mt-5 text-white/70 leading-relaxed">
-            8Caps builds and operates specialist websites, platforms and tools.
-            Each one is purpose-built to solve a practical business problem —
-            and this directory brings them all together in one credible place.
+            Founded in 2022, 8Caps is a small, focused team that designs,
+            ships, and operates the kind of practical tools UK businesses
+            actually use every day.
           </p>
         </Container>
       </section>
 
-      {/* Stats strip */}
-      <section className="bg-surface py-12">
-        <Container>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-card border bg-surface p-6 text-center"
-                style={{ borderColor: "var(--color-hairline)" }}
-              >
-                <div
-                  className="text-4xl font-bold text-oxford"
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  {stat.value}
-                </div>
-                <p className="mt-2 text-sm text-ink-muted">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <StatStrip stats={stats} />
 
       {/* What we do */}
       <section className="bg-surface-muted py-16">
         <Container className="max-w-3xl">
           <h2 className="text-2xl font-bold text-ink">What we do</h2>
-          <p className="mt-4 text-ink-muted leading-relaxed">
-            8Caps is a portfolio business. Rather than one large product, we
-            build and run a range of focused digital services — automation
-            tools, lead-generation platforms, property and marketing tools, and
-            more — each aimed at a specific audience and a specific job.
-          </p>
-          <p className="mt-4 text-ink-muted leading-relaxed">
-            Some are flagship products in active use; others are newer or still
-            in development. What they share is a practical purpose: every site
-            exists to make a real task faster, easier or cheaper for the people
-            who use it.
-          </p>
-          <p className="mt-4 text-ink-muted leading-relaxed">
-            This site is the directory for all of it — a single, trustworthy
-            place to explore what 8Caps offers, see what each product does, and
-            get in touch about any of them.
-          </p>
+          <div className="mt-6 space-y-5 text-ink-muted leading-relaxed">
+            <p>
+              <strong className="text-ink">What we build.</strong> The
+              unglamorous stuff that runs your business: the internal app, the
+              AI that drafts your emails, the automation that means no one has
+              to re-key a customer detail again.
+            </p>
+            <p>
+              <strong className="text-ink">Who we build it for.</strong> UK
+              SMBs, typically £500k–£10m turnover, 5–50 people, in sectors from
+              hospitality to publishing to e-commerce.
+            </p>
+            <p>
+              <strong className="text-ink">Why this approach works.</strong> We
+              don&rsquo;t just build software — we operate it. Every product on
+              our <a href="/products" className="underline">products page</a>{" "}
+              is a real, running, paying business. We know what &ldquo;shipped&rdquo;
+              means because we live it.
+            </p>
+          </div>
         </Container>
       </section>
 
-      {/* Our approach */}
+      {/* Disciplines */}
       <section className="bg-surface py-16">
+        <Container>
+          <h2 className="text-2xl font-bold text-ink">Our disciplines</h2>
+          <p className="mt-2 text-ink-muted">
+            Four capabilities, end-to-end — under one roof.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {DISCIPLINES.map((d) => (
+              <DisciplineCard key={d.title} {...d} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* How we work */}
+      <section className="bg-surface-muted py-16">
         <Container className="max-w-3xl">
-          <h2 className="text-2xl font-bold text-ink">Our approach</h2>
+          <h2 className="text-2xl font-bold text-ink">How we work</h2>
           <div className="mt-8 space-y-7">
-            {APPROACH.map((item) => (
-              <div key={item.title} className="flex gap-4">
+            {HOW_WE_WORK.map((step) => (
+              <div key={step.title} className="flex gap-4">
                 <div
                   className="mt-1.5 h-0.5 w-7 shrink-0 rounded-full"
                   style={{ background: "var(--color-accent)" }}
                 />
                 <div>
-                  <h3 className="font-semibold text-ink">{item.title}</h3>
+                  <h3 className="font-semibold text-ink">{step.title}</h3>
                   <p className="mt-1 text-sm text-ink-muted leading-relaxed">
-                    {item.body}
+                    {step.body}
                   </p>
                 </div>
               </div>
