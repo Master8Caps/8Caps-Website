@@ -8,6 +8,11 @@ import type {
   SiteFormValues,
   Tag,
 } from "@/types/domain";
+import type {
+  AdminCaseStudy,
+  AdminCaseStudyRow,
+  CaseStudyService,
+} from "@/types/case-study";
 
 interface AdminSiteRowRaw {
   id: string;
@@ -55,22 +60,29 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [total, published, draft, categories, thisWeek] = await Promise.all([
-    supabase.from("sites").select("id", { count: "exact", head: true }),
-    supabase
-      .from("sites")
-      .select("id", { count: "exact", head: true })
-      .eq("publish_status", "published"),
-    supabase
-      .from("sites")
-      .select("id", { count: "exact", head: true })
-      .eq("publish_status", "draft"),
-    supabase.from("categories").select("id", { count: "exact", head: true }),
-    supabase
-      .from("sites")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", weekAgo),
-  ]);
+  const [total, published, draft, categories, thisWeek, caseStudies, pendingApprovals] =
+    await Promise.all([
+      supabase.from("sites").select("id", { count: "exact", head: true }),
+      supabase
+        .from("sites")
+        .select("id", { count: "exact", head: true })
+        .eq("publish_status", "published"),
+      supabase
+        .from("sites")
+        .select("id", { count: "exact", head: true })
+        .eq("publish_status", "draft"),
+      supabase.from("categories").select("id", { count: "exact", head: true }),
+      supabase
+        .from("sites")
+        .select("id", { count: "exact", head: true })
+        .gte("created_at", weekAgo),
+      supabase.from("case_studies").select("id", { count: "exact", head: true }),
+      supabase
+        .from("case_studies")
+        .select("id", { count: "exact", head: true })
+        .eq("publish_status", "published")
+        .is("testimonial_approved_at", null),
+    ]);
 
   return {
     totalSites: total.count ?? 0,
@@ -78,6 +90,8 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     draftSites: draft.count ?? 0,
     categories: categories.count ?? 0,
     sitesAddedThisWeek: thisWeek.count ?? 0,
+    caseStudyCount: caseStudies.count ?? 0,
+    pendingCaseStudyApprovals: pendingApprovals.count ?? 0,
   };
 }
 
@@ -209,4 +223,136 @@ export async function getRecentSites(limit = 5): Promise<RecentSite[]> {
     publishStatus: r.publish_status,
     categoryName: r.category?.name ?? null,
   }));
+}
+
+interface AdminCaseStudyRowRaw {
+  id: string;
+  slug: string;
+  client_name: string;
+  client_sector: string | null;
+  year: number | null;
+  is_featured: boolean;
+  publish_status: AdminCaseStudyRow["publishStatus"];
+  testimonial_approved_at: string | null;
+}
+
+/**
+ * Admin case studies list. Optional filter:
+ *   - search: case-insensitive on client_name
+ *   - status: 'pending' (published + unapproved), 'live' (published + approved),
+ *     'featured' (is_featured = true, any state), or undefined (all)
+ */
+export async function getAdminCaseStudies(filter?: {
+  search?: string;
+  status?: "pending" | "live" | "featured";
+}): Promise<AdminCaseStudyRow[]> {
+  const supabase = await createServerSupabase();
+  let query = supabase
+    .from("case_studies")
+    .select(
+      "id, slug, client_name, client_sector, year, is_featured, publish_status, testimonial_approved_at",
+    )
+    .order("is_featured", { ascending: false })
+    .order("sort_order", { ascending: true });
+
+  if (filter?.search) query = query.ilike("client_name", `%${filter.search}%`);
+  if (filter?.status === "pending") {
+    query = query.eq("publish_status", "published").is("testimonial_approved_at", null);
+  } else if (filter?.status === "live") {
+    query = query.eq("publish_status", "published").not("testimonial_approved_at", "is", null);
+  } else if (filter?.status === "featured") {
+    query = query.eq("is_featured", true);
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error(`Failed to load case studies: ${error.message}`);
+
+  return ((data ?? []) as unknown as AdminCaseStudyRowRaw[]).map((r) => ({
+    id: r.id,
+    slug: r.slug,
+    clientName: r.client_name,
+    clientSector: r.client_sector,
+    year: r.year,
+    isFeatured: r.is_featured,
+    publishStatus: r.publish_status,
+    testimonialApprovedAt: r.testimonial_approved_at,
+  }));
+}
+
+interface CaseStudyEditRaw {
+  id: string;
+  slug: string;
+  client_name: string;
+  client_sector: string | null;
+  year: number | null;
+  logo_url: string | null;
+  brand_colour: string | null;
+  outcome_headline: string;
+  story_problem: string;
+  story_solution: string;
+  testimonial_quote: string;
+  testimonial_author: string;
+  testimonial_role: string | null;
+  testimonial_approved_at: string | null;
+  tech_stack: string[] | null;
+  publish_status: AdminCaseStudy["publishStatus"];
+  is_featured: boolean;
+  sort_order: number;
+  case_study_services: { service: CaseStudyService }[];
+}
+
+/** A case study in the editable form shape, or null if not found. */
+export async function getCaseStudyForEdit(
+  id: string,
+): Promise<AdminCaseStudy | null> {
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("case_studies")
+    .select(
+      "id, slug, client_name, client_sector, year, logo_url, brand_colour, " +
+        "outcome_headline, story_problem, story_solution, " +
+        "testimonial_quote, testimonial_author, testimonial_role, testimonial_approved_at, " +
+        "tech_stack, publish_status, is_featured, sort_order, " +
+        "case_study_services (service)",
+    )
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to load case study: ${error.message}`);
+  if (!data) return null;
+
+  const row = data as unknown as CaseStudyEditRaw;
+  return {
+    id: row.id,
+    slug: row.slug,
+    clientName: row.client_name,
+    clientSector: row.client_sector,
+    year: row.year,
+    logoUrl: row.logo_url,
+    brandColour: row.brand_colour,
+    outcomeHeadline: row.outcome_headline,
+    storyProblem: row.story_problem,
+    storySolution: row.story_solution,
+    testimonialQuote: row.testimonial_quote,
+    testimonialAuthor: row.testimonial_author,
+    testimonialRole: row.testimonial_role,
+    testimonialApprovedAt: row.testimonial_approved_at,
+    techStack: row.tech_stack ?? [],
+    publishStatus: row.publish_status,
+    isFeatured: row.is_featured,
+    sortOrder: row.sort_order,
+    services: row.case_study_services.map((s) => s.service),
+  };
+}
+
+/** Count of case studies that are published but awaiting testimonial approval. */
+export async function getPendingApprovalCount(): Promise<number> {
+  const supabase = await createServerSupabase();
+  const { count, error } = await supabase
+    .from("case_studies")
+    .select("id", { count: "exact", head: true })
+    .eq("publish_status", "published")
+    .is("testimonial_approved_at", null);
+  if (error) throw new Error(`Failed to count pending case studies: ${error.message}`);
+  return count ?? 0;
 }

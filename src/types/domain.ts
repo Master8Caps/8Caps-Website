@@ -118,6 +118,8 @@ export interface DashboardStats {
   draftSites: number;
   categories: number;
   sitesAddedThisWeek: number;
+  caseStudyCount: number;
+  pendingCaseStudyApprovals: number;
 }
 
 /** Result returned by a Server Action on the validation / DB-error path. */
