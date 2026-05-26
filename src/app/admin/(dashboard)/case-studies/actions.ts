@@ -164,6 +164,6 @@ export async function revokeApproval(id: string): Promise<ActionResult> {
 }
 
 /** Convenience used by the new-case-study page default slug seed. */
-export function suggestSlug(clientName: string): string {
+export async function suggestSlug(clientName: string): Promise<string> {
   return slugify(clientName);
 }
