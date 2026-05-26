@@ -8,7 +8,7 @@ import {
 } from "@/lib/data/admin";
 import { updateSite, deleteSite } from "../../actions";
 
-export default async function EditSitePage({
+export default async function EditProductPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -38,7 +38,7 @@ export default async function EditSitePage({
   return (
     <div>
       <div className="flex items-center justify-between px-8 pt-8">
-        <h1 className="text-2xl font-bold text-ink">Edit website</h1>
+        <h1 className="text-2xl font-bold text-ink">Edit product</h1>
         <DeleteSiteButton onDelete={handleDelete} />
       </div>
       <SiteForm

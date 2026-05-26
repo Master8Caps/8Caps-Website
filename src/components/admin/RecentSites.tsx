@@ -14,7 +14,7 @@ export function RecentSites({ sites }: { sites: RecentSite[] }) {
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-ink">Recently added</h2>
         <Link
-          href={adminHref("/sites")}
+          href={adminHref("/products")}
           className="text-sm font-semibold text-accent"
         >
           View all →
@@ -22,7 +22,7 @@ export function RecentSites({ sites }: { sites: RecentSite[] }) {
       </div>
 
       {sites.length === 0 ? (
-        <p className="mt-3 text-sm text-ink-muted">No websites yet.</p>
+        <p className="mt-3 text-sm text-ink-muted">No products yet.</p>
       ) : (
         <ul className="mt-2">
           {sites.map((s) => (
@@ -32,7 +32,7 @@ export function RecentSites({ sites }: { sites: RecentSite[] }) {
               style={{ borderColor: "var(--color-hairline)" }}
             >
               <Link
-                href={adminHref(`/sites/${s.id}/edit`)}
+                href={adminHref(`/products/${s.id}/edit`)}
                 className="text-sm font-medium text-ink hover:text-accent"
               >
                 {s.name}

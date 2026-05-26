@@ -9,9 +9,9 @@ import { siteFormSchema } from "@/lib/schemas";
 import { slugify } from "@/lib/slugify";
 import type { ActionResult, SiteFormValues } from "@/types/domain";
 
-async function sitesListHref(): Promise<string> {
+async function productsListHref(): Promise<string> {
   const basePath = await getAdminBasePath();
-  return adminPath(basePath, "/sites");
+  return adminPath(basePath, "/products");
 }
 
 /**
@@ -165,7 +165,7 @@ export async function createSite(values: SiteFormValues): Promise<ActionResult> 
   }
 
   revalidatePublic();
-  redirect(await sitesListHref());
+  redirect(await productsListHref());
 }
 
 export async function updateSite(
@@ -196,7 +196,7 @@ export async function updateSite(
   }
 
   revalidatePublic();
-  redirect(await sitesListHref());
+  redirect(await productsListHref());
 }
 
 export async function deleteSite(id: string): Promise<ActionResult> {
@@ -206,5 +206,5 @@ export async function deleteSite(id: string): Promise<ActionResult> {
     return { ok: false, error: `Could not delete site: ${error.message}` };
   }
   revalidatePublic();
-  redirect(await sitesListHref());
+  redirect(await productsListHref());
 }

@@ -9,7 +9,7 @@ const STATUS_STYLE: Record<string, string> = {
   archived: "bg-black/5 text-ink-muted",
 };
 
-export default async function AdminSitesPage({
+export default async function AdminProductsPage({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
@@ -23,12 +23,12 @@ export default async function AdminSitesPage({
   return (
     <div className="p-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-ink">Websites</h1>
+        <h1 className="text-2xl font-bold text-ink">Products</h1>
         <Link
-          href={adminPath(basePath, "/sites/new")}
+          href={adminPath(basePath, "/products/new")}
           className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
         >
-          Add a website
+          Add a product
         </Link>
       </div>
 
@@ -61,7 +61,7 @@ export default async function AdminSitesPage({
             {sites.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-4 py-8 text-center text-ink-muted">
-                  No websites yet.
+                  No products yet.
                 </td>
               </tr>
             )}
@@ -89,7 +89,7 @@ export default async function AdminSitesPage({
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Link
-                    href={adminPath(basePath, `/sites/${s.id}/edit`)}
+                    href={adminPath(basePath, `/products/${s.id}/edit`)}
                     className="font-semibold text-accent"
                   >
                     Edit

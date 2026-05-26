@@ -14,7 +14,7 @@ export function DashboardBanner({
   totalSites: number;
   addedThisWeek: number;
 }) {
-  const sitesWord = totalSites === 1 ? "website" : "websites";
+  const productsWord = totalSites === 1 ? "product" : "products";
   const adminHref = useAdminPath();
 
   return (
@@ -27,15 +27,15 @@ export function DashboardBanner({
           <Greeting name={name} fallbackHour={londonHour()} />
         </h1>
         <p className="mt-1 text-sm text-accent-soft">
-          {totalSites} {sitesWord} in the directory · {addedThisWeek} added this
-          week
+          {totalSites} {productsWord} in the directory · {addedThisWeek} added
+          this week
         </p>
       </div>
       <Link
-        href={adminHref("/sites/new")}
+        href={adminHref("/products/new")}
         className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
       >
-        + Add a website
+        + Add a product
       </Link>
     </div>
   );

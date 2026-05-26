@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decideRoute } from "./host-routing";
+import { decideRoute, legacySitesRedirect } from "./host-routing";
 
 describe("decideRoute — admin subdomain", () => {
   it("rewrites the root to /admin", () => {
@@ -104,5 +104,70 @@ describe("decideRoute — dev and preview hosts", () => {
     expect(decideRoute("example.com", "/admin")).toEqual({
       kind: "passthrough",
     });
+  });
+});
+
+describe("legacySitesRedirect — admin subdomain", () => {
+  it("renames /sites to /products", () => {
+    expect(legacySitesRedirect("admin.8caps.co.uk", "/sites")).toBe("/products");
+  });
+
+  it("renames /sites/abc to /products/abc", () => {
+    expect(legacySitesRedirect("admin.8caps.co.uk", "/sites/abc")).toBe(
+      "/products/abc",
+    );
+  });
+
+  it("renames /sites/abc/edit to /products/abc/edit", () => {
+    expect(legacySitesRedirect("admin.8caps.co.uk", "/sites/abc/edit")).toBe(
+      "/products/abc/edit",
+    );
+  });
+
+  it("renames /sites/new to /products/new", () => {
+    expect(legacySitesRedirect("admin.8caps.co.uk", "/sites/new")).toBe(
+      "/products/new",
+    );
+  });
+});
+
+describe("legacySitesRedirect — apex + dev /admin paths", () => {
+  it("renames /admin/sites on apex", () => {
+    expect(legacySitesRedirect("8caps.co.uk", "/admin/sites")).toBe(
+      "/admin/products",
+    );
+  });
+
+  it("renames /admin/sites/new on localhost", () => {
+    expect(legacySitesRedirect("localhost:3000", "/admin/sites/new")).toBe(
+      "/admin/products/new",
+    );
+  });
+
+  it("renames /admin/sites/abc/edit on apex", () => {
+    expect(legacySitesRedirect("8caps.co.uk", "/admin/sites/abc/edit")).toBe(
+      "/admin/products/abc/edit",
+    );
+  });
+});
+
+describe("legacySitesRedirect — no redirect needed", () => {
+  it("returns null for public /sites on apex (handled by next.config redirects)", () => {
+    expect(legacySitesRedirect("8caps.co.uk", "/sites")).toBeNull();
+  });
+
+  it("returns null for an already-renamed /products path on subdomain", () => {
+    expect(
+      legacySitesRedirect("admin.8caps.co.uk", "/products/abc/edit"),
+    ).toBeNull();
+  });
+
+  it("returns null for an already-renamed /admin/products path on apex", () => {
+    expect(legacySitesRedirect("8caps.co.uk", "/admin/products")).toBeNull();
+  });
+
+  it("returns null for unrelated paths", () => {
+    expect(legacySitesRedirect("admin.8caps.co.uk", "/categories")).toBeNull();
+    expect(legacySitesRedirect("8caps.co.uk", "/work")).toBeNull();
   });
 });

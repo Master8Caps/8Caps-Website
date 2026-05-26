@@ -13,11 +13,11 @@ describe("RecentSites", () => {
     render(<RecentSites sites={sites} />);
     expect(
       screen.getByRole("link", { name: /Riverside Plumbing/ }),
-    ).toHaveAttribute("href", "/admin/sites/1/edit");
+    ).toHaveAttribute("href", "/admin/products/1/edit");
   });
 
   it("shows an empty message when there are no sites", () => {
     render(<RecentSites sites={[]} />);
-    expect(screen.getByText(/no websites yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/no products yet/i)).toBeInTheDocument();
   });
 });

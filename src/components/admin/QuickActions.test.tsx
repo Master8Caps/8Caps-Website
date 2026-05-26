@@ -5,13 +5,13 @@ import { QuickActions } from "./QuickActions";
 describe("QuickActions", () => {
   it("links to the four admin areas", () => {
     render(<QuickActions />);
-    expect(screen.getByRole("link", { name: /add website/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /add product/i })).toHaveAttribute(
       "href",
-      "/admin/sites/new",
+      "/admin/products/new",
     );
     expect(
-      screen.getByRole("link", { name: /manage websites/i }),
-    ).toHaveAttribute("href", "/admin/sites");
+      screen.getByRole("link", { name: /manage products/i }),
+    ).toHaveAttribute("href", "/admin/products");
     expect(
       screen.getByRole("link", { name: /tidy categories/i }),
     ).toHaveAttribute("href", "/admin/categories");

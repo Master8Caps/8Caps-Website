@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useAdminPath } from "./AdminPathContext";
 
 const ACTIONS = [
-  { path: "/sites/new", label: "Add website", primary: true },
-  { path: "/sites", label: "Manage websites", primary: false },
+  { path: "/products/new", label: "Add product", primary: true },
+  { path: "/products", label: "Manage products", primary: false },
   { path: "/categories", label: "Tidy categories", primary: false },
   { path: "/enquiries", label: "View enquiries", primary: false },
 ];

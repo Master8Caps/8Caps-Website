@@ -20,6 +20,33 @@ function normaliseHost(raw: string): string {
   return raw.toLowerCase().split(":")[0];
 }
 
+/**
+ * Legacy URL rename: admin `/sites/*` → `/products/*`, mirroring the
+ * public-side redirect in `next.config.ts`. Returns the renamed path when
+ * the input is a legacy admin URL, or `null` otherwise.
+ *
+ * Subdomain bookmarks like `admin.8caps.co.uk/sites/abc/edit` and apex
+ * bookmarks like `8caps.co.uk/admin/sites/abc/edit` both 308 to the
+ * `/products` equivalent.
+ */
+export function legacySitesRedirect(host: string, pathname: string): string | null {
+  const h = normaliseHost(host);
+
+  if (h === ADMIN_HOST) {
+    if (pathname === "/sites") return "/products";
+    if (pathname.startsWith("/sites/")) {
+      return "/products" + pathname.slice("/sites".length);
+    }
+  }
+
+  if (pathname === "/admin/sites") return "/admin/products";
+  if (pathname.startsWith("/admin/sites/")) {
+    return "/admin/products" + pathname.slice("/admin/sites".length);
+  }
+
+  return null;
+}
+
 export function decideRoute(host: string, pathname: string): RouteDecision {
   const h = normaliseHost(host);
 

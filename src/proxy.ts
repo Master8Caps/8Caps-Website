@@ -1,5 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ADMIN_HOST, decideRoute } from "@/lib/host-routing";
+import {
+  ADMIN_HOST,
+  decideRoute,
+  legacySitesRedirect,
+} from "@/lib/host-routing";
 import {
   updateAdminSubdomainSession,
   updateSession,
@@ -7,6 +11,17 @@ import {
 
 export async function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
+
+  // Legacy admin URL rename: /sites/* → /products/* (mirrors the public
+  // /sites → /products redirect in next.config.ts). Emit a 308 before the
+  // host-routing logic so old bookmarks land on the canonical URL.
+  const renamed = legacySitesRedirect(host, request.nextUrl.pathname);
+  if (renamed) {
+    const target = request.nextUrl.clone();
+    target.pathname = renamed;
+    return NextResponse.redirect(target, 308);
+  }
+
   const decision = decideRoute(host, request.nextUrl.pathname);
 
   if (decision.kind === "apex-admin-redirect") {
