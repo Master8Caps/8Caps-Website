@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { siteFormSchema, categoryRenameSchema } from "./schemas";
+import { siteFormSchema, categoryRenameSchema, caseStudyFormSchema } from "./schemas";
+import type { CaseStudyFormValues } from "@/types/case-study";
 
 const validSite = {
   name: "Test Site",
@@ -78,5 +79,83 @@ describe("categoryRenameSchema", () => {
 
   it("rejects an empty name", () => {
     expect(categoryRenameSchema.safeParse({ name: "" }).success).toBe(false);
+  });
+});
+
+const validCaseStudy: CaseStudyFormValues = {
+  clientName: "North Bar",
+  slug: "north-bar",
+  clientSector: "Hospitality",
+  year: 2024,
+  logoUrl: null,
+  brandColour: "",
+  outcomeHeadline: "Sold out every weekend",
+  storyProblem: "Couldn't manage bookings.",
+  storySolution: "Built a booking widget.",
+  testimonialQuote: "It changed our business.",
+  testimonialAuthor: "Obi",
+  testimonialRole: "Owner",
+  techStack: ["Next.js", "Supabase"],
+  services: ["custom_software"],
+  publishStatus: "draft",
+  isFeatured: false,
+  sortOrder: 0,
+  testimonialApproved: false,
+};
+
+describe("caseStudyFormSchema", () => {
+  it("accepts a fully populated valid case study", () => {
+    expect(caseStudyFormSchema.safeParse(validCaseStudy).success).toBe(true);
+  });
+
+  it("requires clientName", () => {
+    expect(
+      caseStudyFormSchema.safeParse({ ...validCaseStudy, clientName: "" }).success,
+    ).toBe(false);
+  });
+
+  it("rejects an invalid slug", () => {
+    expect(
+      caseStudyFormSchema.safeParse({ ...validCaseStudy, slug: "North Bar" }).success,
+    ).toBe(false);
+  });
+
+  it("accepts an empty brandColour", () => {
+    expect(
+      caseStudyFormSchema.safeParse({ ...validCaseStudy, brandColour: "" }).success,
+    ).toBe(true);
+  });
+
+  it("rejects a non-hex brandColour", () => {
+    expect(
+      caseStudyFormSchema.safeParse({ ...validCaseStudy, brandColour: "blue" }).success,
+    ).toBe(false);
+  });
+
+  it("accepts a valid hex brandColour", () => {
+    expect(
+      caseStudyFormSchema.safeParse({ ...validCaseStudy, brandColour: "#1f2937" }).success,
+    ).toBe(true);
+  });
+
+  it("rejects year < 2000", () => {
+    expect(
+      caseStudyFormSchema.safeParse({ ...validCaseStudy, year: 1999 }).success,
+    ).toBe(false);
+  });
+
+  it("accepts a null year", () => {
+    expect(
+      caseStudyFormSchema.safeParse({ ...validCaseStudy, year: null }).success,
+    ).toBe(true);
+  });
+
+  it("rejects an invalid service value", () => {
+    expect(
+      caseStudyFormSchema.safeParse({
+        ...validCaseStudy,
+        services: ["custom_software", "nonsense" as never],
+      }).success,
+    ).toBe(false);
   });
 });
