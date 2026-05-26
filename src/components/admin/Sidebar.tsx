@@ -8,6 +8,7 @@ import { useAdminPath } from "./AdminPathContext";
 const NAV = [
   { path: "/", label: "Dashboard" },
   { path: "/products", label: "Products" },
+  { path: "/case-studies", label: "Case studies" },
   { path: "/categories", label: "Categories" },
   { path: "/enquiries", label: "Enquiries" },
 ];
