@@ -6,7 +6,6 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { getAdminBasePath } from "@/lib/admin-paths.server";
 import { adminPath } from "@/lib/admin-paths";
 import { caseStudyFormSchema } from "@/lib/schemas";
-import { slugify } from "@/lib/slugify";
 import type { ActionResult } from "@/types/domain";
 import type { CaseStudyFormValues } from "@/types/case-study";
 
@@ -161,9 +160,4 @@ export async function revokeApproval(id: string): Promise<ActionResult> {
   revalidatePublic();
   revalidatePath(adminPath(await getAdminBasePath(), "/case-studies"));
   return { ok: true };
-}
-
-/** Convenience used by the new-case-study page default slug seed. */
-export async function suggestSlug(clientName: string): Promise<string> {
-  return slugify(clientName);
 }
