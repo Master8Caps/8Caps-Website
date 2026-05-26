@@ -7,7 +7,15 @@ import {
   getContactFromEmail,
   getContactToEmail,
 } from "@/lib/resend";
+import {
+  enquiryAutoReplyEmail,
+  enquiryNotificationEmail,
+} from "@/lib/email-templates";
 import type { ActionResult } from "@/types/domain";
+
+function getSiteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://8caps.co.uk";
+}
 
 // The `enquiries` table's RLS allows public inserts via the anon key
 // (Plan 1, migration `<ts>_rls.sql`), so the existing `createPublicClient()`
@@ -58,32 +66,54 @@ export async function submitContactForm(
     };
   }
 
-  // 3. Send email notification (best-effort — DB insert is the source of truth).
+  // 3. Send notification email + auto-reply (best-effort — DB insert is the
+  // source of truth, so any email failure is logged but doesn't fail the form).
   const resend = createResendClient();
-  if (resend) {
-    try {
-      await resend.emails.send({
-        from: `8Caps Website <${getContactFromEmail()}>`,
-        to: getContactToEmail(),
-        replyTo: email,
-        subject: `New enquiry from ${name}`,
-        text: [
-          `Name: ${name}`,
-          `Email: ${email}`,
-          `Company: ${company || "—"}`,
-          `Project type: ${projectType}`,
-          `Heard about us: ${heardAbout || "—"}`,
-          "",
-          "Message:",
-          message,
-        ].join("\n"),
-      });
-    } catch (e) {
-      console.error("[contact] Resend send failed:", e);
-      // Don't fail the action — the enquiry is already saved.
-    }
-  } else {
-    console.warn("[contact] RESEND_API_KEY not set; skipped email notification.");
+  if (!resend) {
+    console.warn("[contact] RESEND_API_KEY not set; skipped both emails.");
+    return { ok: true };
+  }
+
+  const siteUrl = getSiteUrl();
+  const fromEmail = getContactFromEmail();
+  const fromHeader = `8Caps Website <${fromEmail}>`;
+
+  const notification = enquiryNotificationEmail({
+    name,
+    email,
+    company: company || null,
+    projectType,
+    heardAbout: heardAbout || null,
+    message,
+    siteUrl,
+  });
+
+  const autoReply = enquiryAutoReplyEmail({ name, siteUrl });
+
+  try {
+    await resend.emails.send({
+      from: fromHeader,
+      to: getContactToEmail(),
+      replyTo: email,
+      subject: notification.subject,
+      html: notification.html,
+      text: notification.text,
+    });
+  } catch (e) {
+    console.error("[contact] Resend notification send failed:", e);
+  }
+
+  try {
+    await resend.emails.send({
+      from: fromHeader,
+      to: email,
+      replyTo: getContactToEmail(),
+      subject: autoReply.subject,
+      html: autoReply.html,
+      text: autoReply.text,
+    });
+  } catch (e) {
+    console.error("[contact] Resend auto-reply send failed:", e);
   }
 
   return { ok: true };
