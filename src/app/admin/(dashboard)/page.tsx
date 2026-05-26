@@ -5,6 +5,7 @@ import { StatCard } from "@/components/admin/StatCard";
 import { DashboardBanner } from "@/components/admin/DashboardBanner";
 import { RecentSites } from "@/components/admin/RecentSites";
 import { QuickActions } from "@/components/admin/QuickActions";
+import { PendingApprovalCallout } from "@/components/admin/PendingApprovalCallout";
 
 const iconClass = "h-5 w-5";
 
@@ -31,6 +32,12 @@ const ICONS = {
       <circle cx="8" cy="8" r="1.5" />
     </svg>
   ),
+  briefcase: (
+    <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    </svg>
+  ),
 };
 
 export default async function AdminDashboard() {
@@ -54,11 +61,14 @@ export default async function AdminDashboard() {
         addedThisWeek={stats.sitesAddedThisWeek}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total websites" value={stats.totalSites} icon={ICONS.globe} />
+      <PendingApprovalCallout count={stats.pendingCaseStudyApprovals} />
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <StatCard label="Total products" value={stats.totalSites} icon={ICONS.globe} />
         <StatCard label="Published" value={stats.publishedSites} icon={ICONS.check} />
         <StatCard label="Drafts" value={stats.draftSites} icon={ICONS.pencil} />
         <StatCard label="Categories" value={stats.categories} icon={ICONS.tag} />
+        <StatCard label="Case studies" value={stats.caseStudyCount} icon={ICONS.briefcase} />
       </div>
 
       <div className="flex flex-col gap-4 lg:flex-row">
