@@ -73,6 +73,32 @@ export async function getPublishedCaseStudies(
   return all.filter((cs) => cs.services.includes(service));
 }
 
+/** A single published, approved case study by slug, or null. RLS enforces the
+ *  published + testimonial-approved gate, so unapproved studies resolve to null
+ *  (→ 404) just as they're absent from `/work`. */
+export async function getCaseStudyBySlug(
+  slug: string,
+): Promise<CaseStudy | null> {
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from("case_studies")
+    .select(COLUMNS)
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to load case study "${slug}": ${error.message}`);
+  return data ? toCaseStudy(data as unknown as CaseStudyRow) : null;
+}
+
+/** Slugs of all publicly-visible case studies — for the sitemap and static
+ *  params. RLS restricts the result to published + approved studies. */
+export async function getCaseStudySlugs(): Promise<string[]> {
+  const supabase = createPublicClient();
+  const { data, error } = await supabase.from("case_studies").select("slug");
+  if (error) throw new Error(`Failed to load case study slugs: ${error.message}`);
+  return (data ?? []).map((r) => r.slug as string);
+}
+
 /** Featured case studies for the homepage. */
 export async function getFeaturedCaseStudies(limit = 3): Promise<CaseStudy[]> {
   const supabase = createPublicClient();

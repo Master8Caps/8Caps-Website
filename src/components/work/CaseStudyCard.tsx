@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { CaseStudy } from "@/types/case-study";
 import { CASE_STUDY_SERVICE_LABELS } from "@/types/case-study";
 
@@ -13,8 +14,9 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
     : undefined;
 
   return (
-    <article
-      className="rounded-card border p-8 sm:p-10"
+    <Link
+      href={`/work/${cs.slug}`}
+      className="group block rounded-card border p-8 transition-shadow hover:shadow-md sm:p-10"
       style={{
         ...cardStyle,
         borderColor: "var(--color-hairline)",
@@ -46,48 +48,24 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
       </div>
 
       {/* Outcome headline */}
-      <h3 className="mt-6 text-2xl font-bold text-ink sm:text-3xl">
+      <h3 className="mt-6 text-2xl font-bold text-ink group-hover:text-accent sm:text-3xl">
         {cs.outcomeHeadline}
       </h3>
 
       {/* Meta line */}
       <p className="mt-2 text-sm text-ink-muted">{meta}</p>
 
-      {/* Story */}
-      <div className="mt-6 space-y-3 text-ink-muted leading-relaxed">
-        <p>{cs.storyProblem}</p>
-        <p>{cs.storySolution}</p>
-      </div>
+      {/* Teaser — first lines of the problem */}
+      <p className="mt-4 line-clamp-2 text-ink-muted leading-relaxed">
+        {cs.storyProblem}
+      </p>
 
-      {/* Testimonial */}
-      <blockquote
-        className="mt-6 rounded-card border-l-4 bg-white p-5"
-        style={{ borderLeftColor: "var(--color-accent)" }}
-      >
-        <p className="text-ink italic">&ldquo;{cs.testimonialQuote}&rdquo;</p>
-        <footer className="mt-2 text-sm font-semibold text-ink">
-          — {cs.testimonialAuthor}
-          {cs.testimonialRole ? `, ${cs.testimonialRole}` : ""}, {cs.clientName}
-        </footer>
-      </blockquote>
-
-      {/* Tech stack */}
-      {cs.techStack.length > 0 && (
-        <div className="mt-6 flex flex-wrap items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-            Built with:
-          </span>
-          {cs.techStack.map((tech) => (
-            <span
-              key={tech}
-              className="rounded-full border px-2.5 py-0.5 text-xs text-ink-muted"
-              style={{ borderColor: "var(--color-hairline)" }}
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      )}
-    </article>
+      <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-accent">
+        Read case study
+        <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+          →
+        </span>
+      </span>
+    </Link>
   );
 }

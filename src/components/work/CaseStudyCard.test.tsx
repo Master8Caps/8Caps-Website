@@ -38,32 +38,29 @@ describe("CaseStudyCard", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the testimonial quote and signed author", () => {
-    render(<CaseStudyCard caseStudy={cs} />);
-    expect(screen.getByText(/It just works/)).toBeInTheDocument();
-    expect(screen.getByText(/Obi, Owner, North Bar/)).toBeInTheDocument();
-  });
-
-  it("renders both story paragraphs", () => {
+  it("renders a teaser from the problem story", () => {
     render(<CaseStudyCard caseStudy={cs} />);
     expect(
       screen.getByText(/track bookings without a spreadsheet/),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/custom booking dashboard/),
-    ).toBeInTheDocument();
-  });
-
-  it("renders tech stack tags", () => {
-    render(<CaseStudyCard caseStudy={cs} />);
-    expect(screen.getByText("Next.js")).toBeInTheDocument();
-    expect(screen.getByText("Supabase")).toBeInTheDocument();
-    expect(screen.getByText("Make.com")).toBeInTheDocument();
   });
 
   it("renders the service pillar tags", () => {
     render(<CaseStudyCard caseStudy={cs} />);
     expect(screen.getByText("Custom Software")).toBeInTheDocument();
     expect(screen.getByText("Automation")).toBeInTheDocument();
+  });
+
+  it("links the whole card to the case-study detail page", () => {
+    render(<CaseStudyCard caseStudy={cs} />);
+    expect(
+      screen.getByRole("link", { name: /Read case study/ }),
+    ).toHaveAttribute("href", "/work/north-bar");
+  });
+
+  it("keeps the full story off the card (it lives on the detail page)", () => {
+    render(<CaseStudyCard caseStudy={cs} />);
+    expect(screen.queryByText(/It just works/)).toBeNull();
+    expect(screen.queryByText("Make.com")).toBeNull();
   });
 });

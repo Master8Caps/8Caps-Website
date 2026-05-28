@@ -6,6 +6,7 @@ import { DashboardBanner } from "@/components/admin/DashboardBanner";
 import { RecentSites } from "@/components/admin/RecentSites";
 import { QuickActions } from "@/components/admin/QuickActions";
 import { PendingApprovalCallout } from "@/components/admin/PendingApprovalCallout";
+import { NewEnquiriesCallout } from "@/components/admin/NewEnquiriesCallout";
 
 const iconClass = "h-5 w-5";
 
@@ -62,6 +63,8 @@ export default async function AdminDashboard() {
       />
 
       <PendingApprovalCallout count={stats.pendingCaseStudyApprovals} />
+
+      <NewEnquiriesCallout count={stats.newEnquiries} />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard label="Total products" value={stats.totalSites} icon={ICONS.globe} />

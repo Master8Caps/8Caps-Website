@@ -1,9 +1,15 @@
 import type { MetadataRoute } from "next";
 import { getAllSiteSlugs } from "@/lib/data/sites";
+import { getCaseStudySlugs } from "@/lib/data/case-studies";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const productSlugs = await getAllSiteSlugs();
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ).replace(/\/$/, "");
+  const [productSlugs, caseStudySlugs] = await Promise.all([
+    getAllSiteSlugs(),
+    getCaseStudySlugs(),
+  ]);
 
   const now = new Date();
 
@@ -27,5 +33,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
   }));
 
-  return [...staticEntries, ...productEntries];
+  const caseStudyEntries: MetadataRoute.Sitemap = caseStudySlugs.map((slug) => ({
+    url: `${baseUrl}/work/${slug}`,
+    lastModified: now,
+  }));
+
+  return [...staticEntries, ...productEntries, ...caseStudyEntries];
 }

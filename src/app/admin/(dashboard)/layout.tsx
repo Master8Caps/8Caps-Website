@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getAdminBasePath } from "@/lib/admin-paths.server";
 import { adminPath } from "@/lib/admin-paths";
+import { getNewEnquiryCount } from "@/lib/data/enquiries";
 import { AdminPathProvider } from "@/components/admin/AdminPathContext";
 import { Sidebar } from "@/components/admin/Sidebar";
 
@@ -21,10 +22,12 @@ export default async function AdminLayout({
   // routes, but if a non-logged-in request reaches the layout, bail out.
   if (!user) redirect(adminPath(basePath, "/login"));
 
+  const newEnquiries = await getNewEnquiryCount();
+
   return (
     <AdminPathProvider basePath={basePath}>
       <div className="flex min-h-screen bg-surface-muted text-ink">
-        <Sidebar email={user.email ?? ""} />
+        <Sidebar email={user.email ?? ""} newEnquiries={newEnquiries} />
         <div className="flex-1 overflow-x-auto">{children}</div>
       </div>
     </AdminPathProvider>

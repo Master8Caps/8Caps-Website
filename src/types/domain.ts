@@ -1,3 +1,5 @@
+import type { ProjectType } from "@/lib/contact-form";
+
 export type PublishStatus = "draft" | "published" | "archived";
 export type SiteLifecycle = "live" | "coming_soon";
 export type SiteVisibility = "public" | "private";
@@ -64,6 +66,20 @@ export interface Enquiry {
   createdAt: string;
 }
 
+/** A contact-form submission as shown in the admin inbox. Carries the extra
+ *  fields the contact form added after the original `Enquiry` shape. */
+export interface AdminEnquiry {
+  id: string;
+  name: string;
+  email: string;
+  company: string | null;
+  projectType: ProjectType | null;
+  heardAbout: string | null;
+  message: string;
+  status: EnquiryStatus;
+  createdAt: string;
+}
+
 /** One service row in the site form. */
 export interface ServiceInput {
   name: string;
@@ -120,6 +136,7 @@ export interface DashboardStats {
   sitesAddedThisWeek: number;
   caseStudyCount: number;
   pendingCaseStudyApprovals: number;
+  newEnquiries: number;
 }
 
 /** Result returned by a Server Action on the validation / DB-error path. */

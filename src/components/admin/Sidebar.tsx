@@ -13,7 +13,13 @@ const NAV = [
   { path: "/enquiries", label: "Enquiries" },
 ];
 
-export function Sidebar({ email }: { email: string }) {
+export function Sidebar({
+  email,
+  newEnquiries = 0,
+}: {
+  email: string;
+  newEnquiries?: number;
+}) {
   const adminHref = useAdminPath();
   return (
     <aside className="flex w-60 shrink-0 flex-col bg-oxford text-white">
@@ -26,15 +32,24 @@ export function Sidebar({ email }: { email: string }) {
         </Link>
       </div>
       <nav className="flex-1 space-y-1 p-3">
-        {NAV.map((item) => (
-          <Link
-            key={item.path}
-            href={adminHref(item.path)}
-            className="block rounded-lg px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
-          >
-            {item.label}
-          </Link>
-        ))}
+        {NAV.map((item) => {
+          const badge =
+            item.path === "/enquiries" && newEnquiries > 0 ? newEnquiries : null;
+          return (
+            <Link
+              key={item.path}
+              href={adminHref(item.path)}
+              className="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-white/75 hover:bg-white/10 hover:text-white"
+            >
+              <span>{item.label}</span>
+              {badge !== null && (
+                <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-semibold text-white">
+                  {badge}
+                </span>
+              )}
+            </Link>
+          );
+        })}
       </nav>
       <div className="border-t border-white/10 p-3">
         <p className="px-3 pb-2 text-xs text-white/45">{email}</p>

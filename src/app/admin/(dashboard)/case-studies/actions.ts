@@ -134,6 +134,14 @@ export async function deleteCaseStudy(id: string): Promise<ActionResult> {
   redirect(await caseStudiesListHref());
 }
 
+/** Revalidate the admin views whose case-study counts/rows go stale on an
+ *  approval change: the case-studies list and the dashboard pending callout. */
+async function revalidateAdminCaseStudies() {
+  const basePath = await getAdminBasePath();
+  revalidatePath(adminPath(basePath, "/case-studies"));
+  revalidatePath(adminPath(basePath, "/"));
+}
+
 export async function approveCaseStudy(id: string): Promise<ActionResult> {
   const supabase = await createServerSupabase();
   const { error } = await supabase
@@ -144,7 +152,7 @@ export async function approveCaseStudy(id: string): Promise<ActionResult> {
     return { ok: false, error: `Could not approve testimonial: ${error.message}` };
   }
   revalidatePublic();
-  revalidatePath(adminPath(await getAdminBasePath(), "/case-studies"));
+  await revalidateAdminCaseStudies();
   return { ok: true };
 }
 
@@ -158,6 +166,6 @@ export async function revokeApproval(id: string): Promise<ActionResult> {
     return { ok: false, error: `Could not revoke approval: ${error.message}` };
   }
   revalidatePublic();
-  revalidatePath(adminPath(await getAdminBasePath(), "/case-studies"));
+  await revalidateAdminCaseStudies();
   return { ok: true };
 }

@@ -60,29 +60,41 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [total, published, draft, categories, thisWeek, caseStudies, pendingApprovals] =
-    await Promise.all([
-      supabase.from("sites").select("id", { count: "exact", head: true }),
-      supabase
-        .from("sites")
-        .select("id", { count: "exact", head: true })
-        .eq("publish_status", "published"),
-      supabase
-        .from("sites")
-        .select("id", { count: "exact", head: true })
-        .eq("publish_status", "draft"),
-      supabase.from("categories").select("id", { count: "exact", head: true }),
-      supabase
-        .from("sites")
-        .select("id", { count: "exact", head: true })
-        .gte("created_at", weekAgo),
-      supabase.from("case_studies").select("id", { count: "exact", head: true }),
-      supabase
-        .from("case_studies")
-        .select("id", { count: "exact", head: true })
-        .eq("publish_status", "published")
-        .is("testimonial_approved_at", null),
-    ]);
+  const [
+    total,
+    published,
+    draft,
+    categories,
+    thisWeek,
+    caseStudies,
+    pendingApprovals,
+    newEnquiries,
+  ] = await Promise.all([
+    supabase.from("sites").select("id", { count: "exact", head: true }),
+    supabase
+      .from("sites")
+      .select("id", { count: "exact", head: true })
+      .eq("publish_status", "published"),
+    supabase
+      .from("sites")
+      .select("id", { count: "exact", head: true })
+      .eq("publish_status", "draft"),
+    supabase.from("categories").select("id", { count: "exact", head: true }),
+    supabase
+      .from("sites")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", weekAgo),
+    supabase.from("case_studies").select("id", { count: "exact", head: true }),
+    supabase
+      .from("case_studies")
+      .select("id", { count: "exact", head: true })
+      .eq("publish_status", "published")
+      .is("testimonial_approved_at", null),
+    supabase
+      .from("enquiries")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "new"),
+  ]);
 
   return {
     totalSites: total.count ?? 0,
@@ -92,6 +104,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     sitesAddedThisWeek: thisWeek.count ?? 0,
     caseStudyCount: caseStudies.count ?? 0,
     pendingCaseStudyApprovals: pendingApprovals.count ?? 0,
+    newEnquiries: newEnquiries.count ?? 0,
   };
 }
 

@@ -1,31 +1,28 @@
 # 📒 Notes for Next Session
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 
 ---
 
-## ✅ Shipped in the previous session
+## ✅ Shipped in the previous session (2026-05-28)
 
-- Admin moved to `admin.8caps.co.uk` (host-routing middleware + DNS + clean URLs)
-- Admin nav rename: Sites → Products (URL, sidebar, copy, legacy redirect)
-- Walked every admin page and tagged what needed reshaping
-- Full **case studies CRUD** at `/admin/case-studies` — list with quick-approve, edit form, dashboard pending callout, 5th stat tile, sidebar entry
-- RLS bug fix: added `is_admin()` SELECT/INSERT/UPDATE/DELETE on `case_studies` + `case_study_services` (had been hiding rows from admin reads)
-- Case-study content drafted + applied for all 7 clients (outcome / problem / solution / testimonial). All still **pending approval** — won't appear on `/work` until you flip the toggle.
-- Two name fixes: North Bar → "North Bar Engineer" + sector "Engineering". Frame SFS sector → "Engineering".
-- Form labels + help text pass on `CaseStudyForm` — every field now has a visible label and one-line explanation (year field specifically clarified)
-- Branded HTML **email templates** (notification + auto-reply) replacing the plain-text dump in `contact/actions.ts`. 12 new tests.
-- Seed cleanup: archived `leadharbour`, `proptoolkit`, `stealth-project` placeholder products
+- **Privacy Policy** — replaced the `/privacy` stub with a full UK GDPR notice built around the real data flow (contact form → Supabase → Resend): who we are, data collected, lawful basis, processors (Supabase/Resend/Vercel), international transfers, retention, cookies (essential-only), rights, ICO complaints. Registration details live as **flagged placeholder constants** at the top of `privacy/page.tsx` — see compliance section below.
+- **Enquiries inbox** — `/admin/enquiries` is now a real inbox (no DB migration needed; the `enquiries.status` enum + admin RLS already existed):
+  - List with New/Read/Archived/All filter tabs; unread rows bold + dot.
+  - Detail page `/admin/enquiries/[id]` — auto-marks-read on open, with **Reply** (mailto), **Archive/Restore**, **Mark unread**.
+  - **Sidebar badge** + **dashboard callout** showing the unread count.
+- **`/work/[slug]` case-study detail pages** — each approved case study now has its own page (hero + challenge/solution + testimonial + tech stack), with `generateStaticParams` + `generateMetadata`. `/work` and the homepage cards became **compact summaries that link out** (avoids duplicate-content SEO penalty).
+- **Sitemap** now includes the `/work/[slug]` routes (6 case studies currently live). Also fixed a pre-existing double-slash bug from a trailing slash in `NEXT_PUBLIC_SITE_URL`.
+- **Admin polish** — `approveCaseStudy`/`revokeApproval` now revalidate the dashboard route too, so the pending count updates without a hard refresh.
+- 13 new tests; 180 passing total. Public pages smoke-tested on the dev server.
 
 ---
 
 ## 🔝 Top priorities next time
 
-Quick wins first, then content / compliance.
-
-1. **Test the contact form end-to-end** — assuming `RESEND_API_KEY` is set on Vercel and DNS has propagated, submit a real enquiry from a throwaway email. Check both inboxes (lead gets the auto-reply, `master@8caps.co.uk` gets the notification with the Reply CTA).
-2. **Approve real case study testimonials** — pick one (probably De Lacy Salons for the dress rehearsal), read it on the admin edit page, refine the testimonial wording if needed, hit **Approve** in the list view. Open `/work` in incognito to verify the layout holds with real-length paragraphs.
-3. **Upload real logos + set brand colours** on each case study via the admin edit form (currently `placehold.co` stubs). Open each client's site, grab their primary hex via DevTools, paste into the colour picker.
+1. **UI/UX revamp** — the big deferred one. Full visual pass on the public site + admin using `ui-ux-pro-max` (its own session — see below).
+2. **Fill the compliance placeholders** — Companies House no., ICO reg, registered office. They now appear in **three** places that must stay in sync: `privacy/page.tsx` (top-of-file constants), `Footer.tsx`, and `contact/page.tsx`.
+3. **Test the contact form end-to-end, then click-test the inbox** — submit a real enquiry from a throwaway email (needs `RESEND_API_KEY` on Vercel). Confirm both inboxes, then open `/admin/enquiries` and exercise open → auto-read → badge decrement → archive (this flow is code-complete + unit-tested but hasn't been click-tested with a live session).
 
 ---
 
@@ -34,15 +31,16 @@ Quick wins first, then content / compliance.
 ### 🧰 Admin Dashboard
 
 - [ ] **UI/UX revamp** — full visual pass (own session, paired with the public-site revamp below using `ui-ux-pro-max`)
-- [ ] **Enquiries inbox** — `/admin/enquiries` is still a stub page. Once Resend is live, building the inbox UI is the next obvious follow-up (table, mark-as-read, archive)
-- [ ] **Case studies admin** small polish: empty-state on `/case-studies` filter chips, `revalidatePath` after approve so the dashboard count updates without hard refresh
+- [x] **Enquiries inbox** — shipped 2026-05-28 (list + detail, mark-read/unread, archive, badge + callout)
+- [x] **Case studies admin** `revalidatePath` after approve — dashboard count now updates without hard refresh
+- [ ] **Case studies admin** small polish: empty-state on `/case-studies` filter chips (the enquiries list has one; case-studies still lacks a per-filter empty state)
 
 ### 📧 Resend
 
 - [x] Pro account + DNS verified (SPF/DKIM/DMARC)
 - [x] API key in `.env.local`
 - [ ] **Confirm `RESEND_API_KEY` is set on Vercel** (Production + Preview) — needed for prod sends
-- [ ] **Test a real form submission** end-to-end (the priority-1 item above)
+- [ ] **Test a real form submission** end-to-end (the priority item above)
 - [ ] Optional: `CONTACT_FROM_EMAIL` / `CONTACT_TO_EMAIL` overrides on Vercel only if you want different addresses than the defaults (`noreply@`, `master@`)
 
 ### 📨 Email templates
@@ -52,17 +50,18 @@ Quick wins first, then content / compliance.
 
 ### ⚖️ Compliance / legal (UK GDPR required before form goes live)
 
-- [ ] **Privacy Policy** — real text replacing the stub at `/privacy`. I can draft boilerplate around your actual data flows (contact form → Supabase → Resend) once you say go.
-- [ ] **Companies House number** — replace `00000000` placeholder in footer + contact compliance band
-- [ ] **ICO registration number** — replace `ZA000000` placeholder
-- [ ] **Registered office address** — replace `Address placeholder`
+- [x] **Privacy Policy** — full notice shipped at `/privacy` (placeholders for the registration details still need real values, below)
+- [ ] **Companies House number** — replace `00000000` in `privacy/page.tsx`, `Footer.tsx`, `contact/page.tsx`
+- [ ] **ICO registration number** — replace `ZA000000` in the same three files
+- [ ] **Registered office address** — replace the placeholder in the same three files
 - [ ] **Insurance details** (Professional Indemnity, Public Liability, Cyber) — surface on `/about` or the Trust footer if lender due-diligence wants it
 
 ### 📝 Content fills
 
 - [x] Case study draft copy applied (all 7) — refinement happens via the admin UI now
-- [x] Testimonial drafts applied (all 7) — review with your boss, refine, then **Approve** per row
+- [x] Testimonial drafts applied (all 7); 6 are now approved + live on `/work`
 - [x] Seed cleanup (3 placeholders archived)
+- [ ] **Upload real logos + set brand colours** on each case study (check for remaining `placehold.co` stubs)
 - [ ] **Real stat numbers** — `20+ Projects shipped`, `12+ UK sectors`, `6+ Products operating` placeholders on `/` and `/about`
 - [ ] **Founding year confirmation** — "Since 2022" assumed; confirm exact date vs Companies House
 - [ ] **Service pillar copy sign-off** — three pillars on `/services` currently use Claude's draft
@@ -70,19 +69,19 @@ Quick wins first, then content / compliance.
 
 ### 🎨 UI/UX full passthrough (its own session)
 
-- [ ] **Public site** — use `ui-ux-pro-max` for a full design review of all six pages
-- [ ] **Admin Dashboard** — same treatment
+- [ ] **Public site** — use `ui-ux-pro-max` for a full design review of all pages (now includes the new `/work/[slug]` detail pages + Privacy)
+- [ ] **Admin Dashboard** — same treatment (now includes the new enquiries inbox)
 - [ ] **Mobile responsive verification** — real devices, not just dev tools
 - [ ] **Accessibility pass** — colour contrast, focus states, ARIA on the contact form
 
 ### ✨ Polish
 
 - [ ] **Per-page OG images** — `/work` and case study pages especially
-- [ ] **Sitemap submission** — `/sitemap.xml` to Google Search Console + Bing Webmaster Tools
+- [ ] **Sitemap submission** — `/sitemap.xml` to Google Search Console + Bing Webmaster Tools (now includes case-study detail pages)
 - [ ] **Lighthouse audit** — perf / a11y / SEO / best-practices; aim ≥ 90 across the board
 - [ ] **Lender-specific landing page** — `/partners/[lender-slug]` once the lender relationship is live (deferred from spec)
 - [ ] **Calendly integration on `/contact`** — "Book a discovery call" button once you have a booking link
-- [ ] **Cookie banner** — only if analytics or other cookie-setting scripts are added later
+- [ ] **Cookie banner** — not needed yet (no analytics/tracking cookies; Privacy Policy says as much) — revisit only if cookie-setting scripts are added later
 
 ### 🔧 Operational
 
