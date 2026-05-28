@@ -27,6 +27,10 @@
   /* ── Radius ── */
   --radius-card: 12px;
 
+  /* ── Elevation (Oxford-tinted, so shadows read as brand depth not grey) ── */
+  --shadow-soft: 0 1px 2px rgba(0, 33, 71, 0.04), 0 6px 20px -10px rgba(0, 33, 71, 0.12);
+  --shadow-lift: 0 2px 4px rgba(0, 33, 71, 0.05), 0 16px 36px -14px rgba(0, 33, 71, 0.22);
+
   /* ── Typography ── */
   --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -41,12 +45,43 @@ body {
   background-color: var(--color-surface);
   color: var(--color-ink);
   font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-heading);
+}
+
+/* Consistent, brand-coloured keyboard focus ring on every interactive element.
+   offset-2 keeps it clear of the element on both light and dark surfaces. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Honour users who ask for less motion — neutralise transitions/animations
+   and the smooth scroll above. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Hero background: solid Oxford Blue + dot grid + corner glow */

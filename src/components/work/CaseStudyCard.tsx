@@ -16,7 +16,7 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   return (
     <Link
       href={`/work/${cs.slug}`}
-      className="group block rounded-card border p-8 transition-shadow hover:shadow-md sm:p-10"
+      className="group block rounded-card border p-8 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift sm:p-10"
       style={{
         ...cardStyle,
         borderColor: "var(--color-hairline)",

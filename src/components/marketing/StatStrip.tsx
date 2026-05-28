@@ -18,11 +18,11 @@ export function StatStrip({ stats }: { stats: Stat[] }) {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-card border bg-surface p-6 text-center"
+              className="rounded-card border bg-surface p-6 text-center shadow-soft"
               style={{ borderColor: "var(--color-hairline)" }}
             >
               <div
-                className="text-4xl font-bold text-oxford"
+                className="text-4xl font-bold tabular-nums text-oxford"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
                 {stat.value}

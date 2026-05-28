@@ -6,7 +6,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 export function SiteCard({ site }: { site: SiteSummary }) {
   return (
     <article
-      className="flex flex-col rounded-card border bg-surface p-5 shadow-sm transition-shadow hover:shadow-md"
+      className="flex flex-col rounded-card border bg-surface p-5 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <div className="flex items-center gap-3">
@@ -48,8 +48,8 @@ export function SiteCard({ site }: { site: SiteSummary }) {
 
       <div className="mt-4 flex gap-3">
         <Link
-          href={`/sites/${site.slug}`}
-          className="flex-1 rounded-lg bg-oxford px-3 py-2 text-center text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+          href={`/products/${site.slug}`}
+          className="flex-1 rounded-lg bg-oxford px-3 py-2 text-center text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
         >
           View details
         </Link>
@@ -57,7 +57,7 @@ export function SiteCard({ site }: { site: SiteSummary }) {
           href={site.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 rounded-lg border px-3 py-2 text-center text-sm font-semibold text-oxford hover:bg-surface-muted transition-colors"
+          className="flex-1 rounded-lg border px-3 py-2 text-center text-sm font-semibold text-oxford transition-colors hover:bg-surface-muted"
           style={{ borderColor: "var(--color-hairline)" }}
         >
           Visit website

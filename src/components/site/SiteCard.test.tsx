@@ -25,10 +25,10 @@ describe("SiteCard", () => {
     expect(screen.getByText("Automation")).toBeInTheDocument();
   });
 
-  it("links 'View details' to the site profile", () => {
+  it("links 'View details' to the product profile", () => {
     render(<SiteCard site={site} />);
     const link = screen.getByRole("link", { name: /view details/i });
-    expect(link).toHaveAttribute("href", "/sites/automated-panda");
+    expect(link).toHaveAttribute("href", "/products/automated-panda");
   });
 
   it("links 'Visit website' to the external URL", () => {
