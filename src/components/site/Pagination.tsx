@@ -18,9 +18,9 @@ export function Pagination({
   }
 
   const linkClass =
-    "rounded-lg border border-hairline px-4 py-2 text-sm text-oxford hover:bg-surface-muted transition-colors";
+    "rounded-lg border border-hairline px-4 py-2.5 text-sm text-oxford transition-colors hover:bg-surface-muted active:scale-[0.98]";
   const disabledClass =
-    "rounded-lg border border-hairline px-4 py-2 text-sm text-ink-muted opacity-50";
+    "rounded-lg border border-hairline px-4 py-2.5 text-sm text-ink-muted opacity-50";
 
   return (
     <nav className="mt-8 flex items-center justify-between">

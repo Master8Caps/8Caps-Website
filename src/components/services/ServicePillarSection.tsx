@@ -24,7 +24,7 @@ export function ServicePillarSection({
   ctaLabel,
 }: ServicePillarSectionProps) {
   return (
-    <section id={anchorId} className="bg-surface py-16">
+    <section id={anchorId} className="bg-surface py-20">
       <Container className="max-w-3xl">
         <div className="flex items-center gap-3">
           <div
@@ -33,7 +33,7 @@ export function ServicePillarSection({
           >
             <Icon size={20} strokeWidth={1.75} className="text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-ink">{title}</h2>
+          <h2 className="text-2xl font-bold text-ink sm:text-3xl">{title}</h2>
         </div>
 
         <p className="mt-4 text-ink-muted leading-relaxed">{description}</p>
@@ -65,7 +65,7 @@ export function ServicePillarSection({
         <div className="mt-8">
           <Link
             href={ctaHref}
-            className="inline-flex items-center justify-center rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:shadow-lift hover:brightness-110 active:scale-[0.98]"
           >
             {ctaLabel}
           </Link>

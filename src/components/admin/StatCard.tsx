@@ -11,7 +11,7 @@ export function StatCard({
 }) {
   return (
     <div
-      className="rounded-card border bg-surface p-5"
+      className="rounded-card border bg-surface p-5 shadow-soft"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <div className="flex items-center justify-between">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Code, Sparkles, Workflow, Paintbrush } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { CTASection } from "@/components/marketing/CTASection";
@@ -93,9 +94,9 @@ export default function AboutPage() {
       <StatStrip stats={stats} />
 
       {/* What we do */}
-      <section className="bg-surface-muted py-16">
+      <section className="bg-surface-muted py-20">
         <Container className="max-w-3xl">
-          <h2 className="text-2xl font-bold text-ink">What we do</h2>
+          <h2 className="text-2xl font-bold text-ink sm:text-3xl">What we do</h2>
           <div className="mt-6 space-y-5 text-ink-muted leading-relaxed">
             <p>
               <strong className="text-ink">What we build.</strong> The
@@ -111,7 +112,7 @@ export default function AboutPage() {
             <p>
               <strong className="text-ink">Why this approach works.</strong> We
               don&rsquo;t just build software — we operate it. Every product on
-              our <a href="/products" className="underline">products page</a>{" "}
+              our <Link href="/products" className="underline">products page</Link>{" "}
               is a real, running, paying business. We know what &ldquo;shipped&rdquo;
               means because we live it.
             </p>
@@ -120,9 +121,9 @@ export default function AboutPage() {
       </section>
 
       {/* Disciplines */}
-      <section className="bg-surface py-16">
+      <section className="bg-surface py-20">
         <Container>
-          <h2 className="text-2xl font-bold text-ink">Our disciplines</h2>
+          <h2 className="text-2xl font-bold text-ink sm:text-3xl">Our disciplines</h2>
           <p className="mt-2 text-ink-muted">
             Four capabilities, end-to-end — under one roof.
           </p>
@@ -135,9 +136,9 @@ export default function AboutPage() {
       </section>
 
       {/* How we work */}
-      <section className="bg-surface-muted py-16">
+      <section className="bg-surface-muted py-20">
         <Container className="max-w-3xl">
-          <h2 className="text-2xl font-bold text-ink">How we work</h2>
+          <h2 className="text-2xl font-bold text-ink sm:text-3xl">How we work</h2>
           <div className="mt-8 space-y-7">
             {HOW_WE_WORK.map((step) => (
               <div key={step.title} className="flex gap-4">

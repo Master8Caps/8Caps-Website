@@ -39,10 +39,10 @@ export default async function DirectoryPage({
           <p className="text-sm font-semibold uppercase tracking-wide text-white/70">
             Our own products
           </p>
-          <h1 className="mt-3 text-3xl font-bold">
+          <h1 className="mt-3 text-balance text-3xl font-bold">
             We don&rsquo;t just build software &mdash; we operate it.
           </h1>
-          <p className="mt-4 max-w-3xl text-white/65">
+          <p className="mt-4 max-w-3xl text-pretty text-white/65">
             Every project we ship for a client, we&rsquo;ve already lived ourselves.
             These are the products 8Caps owns and runs in production &mdash;
             practical tools solving real business problems.
@@ -82,7 +82,7 @@ export default async function DirectoryPage({
             )}
             <button
               type="submit"
-              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+              className="rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
             >
               Search
             </button>

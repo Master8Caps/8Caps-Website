@@ -37,7 +37,7 @@ const EMPTY: SiteFormValues = {
   tagIds: [],
 };
 
-const field = "w-full rounded-lg border px-3 py-2 text-sm";
+const field = "w-full rounded-lg border bg-surface px-3 py-2.5 text-sm";
 const fieldStyle = { borderColor: "var(--color-hairline)" };
 const sectionTitle = "text-sm font-semibold uppercase tracking-wide text-ink-muted";
 const NEW_CATEGORY = "__new_category__";
@@ -171,7 +171,7 @@ export function SiteForm({
               className="rounded-lg"
             />
           )}
-          <label className="cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium text-ink"
+          <label className="cursor-pointer rounded-lg border bg-surface px-3 py-2 text-sm font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98]"
             style={fieldStyle}>
             {uploading ? "Uploading…" : values.logoUrl ? "Change logo" : "Upload logo"}
             <input
@@ -351,7 +351,7 @@ export function SiteForm({
       <button
         type="submit"
         disabled={pending || uploading}
-        className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+        className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
       >
         {pending ? "Saving…" : "Save website"}
       </button>

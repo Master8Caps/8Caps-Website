@@ -32,8 +32,8 @@ export function ServicesPicker({
             aria-pressed={active}
             className={
               active
-                ? "rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white"
-                : "rounded-full border px-3 py-1 text-xs font-medium text-ink"
+                ? "rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+                : "rounded-full border px-3 py-1 text-xs font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98]"
             }
             style={active ? undefined : { borderColor: "var(--color-hairline)" }}
           >

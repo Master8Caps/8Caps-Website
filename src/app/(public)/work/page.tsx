@@ -37,10 +37,10 @@ export default async function WorkPage({ searchParams }: WorkPageProps) {
           >
             Selected work
           </p>
-          <h1 className="mt-3 max-w-3xl text-3xl font-bold sm:text-4xl">
+          <h1 className="mt-3 max-w-3xl text-balance text-3xl font-bold sm:text-4xl">
             Projects we&rsquo;ve shipped for UK businesses.
           </h1>
-          <p className="mt-5 max-w-2xl text-white/70">
+          <p className="mt-5 max-w-2xl text-pretty text-white/70">
             A few of the companies we&rsquo;ve built software, AI, and
             automation for. Different sectors, same outcome — work that runs.
           </p>
@@ -55,11 +55,11 @@ export default async function WorkPage({ searchParams }: WorkPageProps) {
       </section>
 
       {/* Case study sections */}
-      <section className="bg-surface-muted pb-16">
+      <section className="bg-surface-muted pb-20">
         <Container>
           {caseStudies.length === 0 ? (
             <p
-              className="rounded-card border bg-surface p-8 text-center text-ink-muted"
+              className="rounded-card border bg-surface p-8 text-center text-ink-muted shadow-soft"
               style={{ borderColor: "var(--color-hairline)" }}
             >
               No case studies to show yet.

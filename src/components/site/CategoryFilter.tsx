@@ -21,7 +21,7 @@ export function CategoryFilter({
     return qs ? `/products?${qs}` : "/products";
   }
 
-  const base = "rounded-full px-3 py-1.5 text-sm font-medium transition-colors";
+  const base = "rounded-full px-3 py-1.5 text-sm font-medium transition-colors active:scale-[0.98]";
   const active = "bg-accent text-white";
   const inactive = "border border-hairline text-ink-muted hover:text-ink hover:border-oxford/30";
 

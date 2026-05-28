@@ -8,14 +8,14 @@ export function RecentSites({ sites }: { sites: RecentSite[] }) {
   const adminHref = useAdminPath();
   return (
     <div
-      className="rounded-card border bg-surface p-5"
+      className="rounded-card border bg-surface p-5 shadow-soft"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-ink">Recently added</h2>
         <Link
           href={adminHref("/products")}
-          className="text-sm font-semibold text-accent"
+          className="text-sm font-semibold text-accent transition-colors hover:text-oxford"
         >
           View all →
         </Link>
@@ -28,7 +28,7 @@ export function RecentSites({ sites }: { sites: RecentSite[] }) {
           {sites.map((s) => (
             <li
               key={s.id}
-              className="flex items-center justify-between border-b py-2.5 last:border-b-0"
+              className="-mx-2 flex items-center justify-between rounded-lg border-b px-2 py-2.5 transition-colors last:border-b-0 hover:bg-surface-muted"
               style={{ borderColor: "var(--color-hairline)" }}
             >
               <Link

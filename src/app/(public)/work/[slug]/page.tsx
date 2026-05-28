@@ -78,7 +78,7 @@ export default async function CaseStudyPage({
             </div>
           </div>
 
-          <h1 className="mt-6 max-w-3xl text-3xl font-bold sm:text-4xl">
+          <h1 className="mt-6 max-w-3xl text-balance text-3xl font-bold sm:text-4xl">
             {cs.outcomeHeadline}
           </h1>
           {meta && <p className="mt-3 text-white/70">{meta}</p>}

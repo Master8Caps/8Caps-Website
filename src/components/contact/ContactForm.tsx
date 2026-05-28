@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { submitContactForm } from "@/app/(public)/contact/actions";
 import { PROJECT_TYPES, PROJECT_TYPE_LABELS } from "@/lib/contact-form";
@@ -34,16 +35,16 @@ export function ContactForm() {
   if (status.kind === "success") {
     return (
       <div
-        className="rounded-card border bg-surface p-8 text-center"
+        className="rounded-card border bg-surface p-8 text-center shadow-soft"
         style={{ borderColor: "var(--color-hairline)" }}
       >
         <h2 className="text-2xl font-bold text-ink">Thanks — message received.</h2>
         <p className="mt-2 text-ink-muted">
           We&rsquo;ll be in touch within one working day.
         </p>
-        <a href="/" className="mt-6 inline-block text-sm font-semibold text-accent">
+        <Link href="/" className="mt-6 inline-block text-sm font-semibold text-accent">
           ← Back to the homepage
-        </a>
+        </Link>
       </div>
     );
   }
@@ -65,7 +66,7 @@ export function ContactForm() {
           name="projectType"
           required
           defaultValue="not_sure"
-          className="mt-1 w-full rounded-lg border bg-white px-3 py-2 text-ink"
+          className="mt-1 w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
           style={{ borderColor: "var(--color-hairline)" }}
         >
           {PROJECT_TYPES.map((p) => (
@@ -88,7 +89,7 @@ export function ContactForm() {
           required
           rows={6}
           minLength={20}
-          className="mt-1 w-full rounded-lg border bg-white px-3 py-2 text-ink"
+          className="mt-1 w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
           style={{ borderColor: "var(--color-hairline)" }}
         />
       </div>
@@ -110,7 +111,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isBusy}
-        className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-60"
+        className="rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
       >
         {isBusy ? "Sending…" : "Send enquiry"}
       </button>
@@ -139,7 +140,7 @@ function Field({
         id={name}
         name={name}
         required={required}
-        className="mt-1 w-full rounded-lg border bg-white px-3 py-2 text-ink"
+        className="mt-1 w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
         style={{ borderColor: "var(--color-hairline)" }}
       />
     </div>

@@ -79,7 +79,7 @@ export function UrlAnalyzer({
 
   return (
     <div
-      className="rounded-card border bg-surface-muted p-5"
+      className="rounded-card border bg-surface-muted p-5 shadow-soft"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <h2
@@ -100,14 +100,14 @@ export function UrlAnalyzer({
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://example.com"
           disabled={running}
-          className="w-full rounded-lg border bg-surface px-3 py-2 text-sm"
+          className="w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
           style={{ borderColor: "var(--color-hairline)" }}
         />
         <button
           type="button"
           onClick={analyse}
           disabled={running || !url.trim()}
-          className="shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+          className="shrink-0 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
         >
           {running ? "Analysing…" : "Analyse"}
         </button>

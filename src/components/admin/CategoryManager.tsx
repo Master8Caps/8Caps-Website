@@ -9,7 +9,7 @@ import {
   mergeCategory,
 } from "@/app/admin/(dashboard)/categories/actions";
 
-const field = "rounded-lg border px-3 py-2 text-sm";
+const field = "rounded-lg border bg-surface px-3 py-2.5 text-sm";
 const fieldStyle = { borderColor: "var(--color-hairline)" };
 
 export function CategoryManager({
@@ -79,7 +79,7 @@ function CategoryRow({
 
   return (
     <div
-      className="flex flex-wrap items-center gap-2 rounded-lg border bg-surface p-3"
+      className="flex flex-wrap items-center gap-2 rounded-lg border bg-surface p-3 shadow-soft transition-colors hover:bg-surface-muted"
       style={fieldStyle}
     >
       <input
@@ -95,7 +95,7 @@ function CategoryRow({
         type="button"
         disabled={disabled || !name.trim() || name.trim() === category.name}
         onClick={() => onRename(name.trim())}
-        className="rounded-lg border px-3 py-2 text-sm font-medium text-ink disabled:opacity-60"
+        className="rounded-lg border px-3 py-2.5 text-sm font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98] disabled:opacity-60"
         style={fieldStyle}
       >
         Rename
@@ -130,7 +130,7 @@ function CategoryRow({
               onMerge(mergeTarget);
             }
           }}
-          className="rounded-lg border px-3 py-2 text-sm font-medium text-ink disabled:opacity-60"
+          className="rounded-lg border px-3 py-2.5 text-sm font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98] disabled:opacity-60"
           style={fieldStyle}
         >
           Merge
@@ -147,7 +147,7 @@ function CategoryRow({
               onDelete();
             }
           }}
-          className="rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-600 disabled:opacity-60"
+          className="rounded-lg border border-red-300 px-3 py-2.5 text-sm font-medium text-red-600 transition-all duration-200 hover:bg-red-50 active:scale-[0.98] disabled:opacity-60"
         >
           Delete
         </button>

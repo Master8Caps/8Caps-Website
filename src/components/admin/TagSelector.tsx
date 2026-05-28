@@ -32,10 +32,10 @@ export function TagSelector({
             key={tag.id}
             type="button"
             onClick={() => toggle(tag.id)}
-            className={`rounded-full px-3 py-1 text-sm ${
+            className={`rounded-full px-3 py-1 text-sm transition-all duration-200 active:scale-[0.98] ${
               active
-                ? "bg-accent text-white"
-                : "border text-ink-muted"
+                ? "bg-accent text-white hover:brightness-110"
+                : "border text-ink-muted hover:bg-surface-muted"
             }`}
             style={active ? undefined : { borderColor: "var(--color-hairline)" }}
           >

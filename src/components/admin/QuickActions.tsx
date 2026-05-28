@@ -14,7 +14,7 @@ export function QuickActions() {
   const adminHref = useAdminPath();
   return (
     <div
-      className="rounded-card border bg-surface p-5"
+      className="rounded-card border bg-surface p-5 shadow-soft"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <h2 className="text-sm font-semibold text-ink">Quick actions</h2>
@@ -25,8 +25,8 @@ export function QuickActions() {
             href={adminHref(a.path)}
             className={
               a.primary
-                ? "rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-white"
-                : "rounded-lg border px-4 py-2 text-center text-sm font-medium text-ink"
+                ? "rounded-lg bg-accent px-4 py-2.5 text-center text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
+                : "rounded-lg border px-4 py-2.5 text-center text-sm font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98]"
             }
             style={a.primary ? undefined : { borderColor: "var(--color-hairline)" }}
           >

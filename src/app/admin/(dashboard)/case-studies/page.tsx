@@ -39,19 +39,23 @@ export default async function AdminCaseStudiesPage({
         <h1 className="text-2xl font-bold text-ink">Case studies</h1>
         <Link
           href={adminPath(basePath, "/case-studies/new")}
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
         >
           + Add case study
         </Link>
       </div>
 
-      <form method="get" className="mt-6 flex flex-wrap items-center gap-3">
+      <form method="get" className="mt-6 max-w-sm">
+        <label htmlFor="case-study-search" className="block text-sm font-medium text-ink">
+          Search
+        </label>
         <input
+          id="case-study-search"
           type="search"
           name="q"
           defaultValue={q ?? ""}
           placeholder="Search by client name…"
-          className="w-full max-w-sm rounded-lg border bg-surface px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
           style={{ borderColor: "var(--color-hairline)" }}
         />
         {/* Preserve the active filter when searching */}
@@ -71,8 +75,8 @@ export default async function AdminCaseStudiesPage({
               href={href}
               className={
                 active
-                  ? "rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white"
-                  : "rounded-full border px-3 py-1 text-xs font-medium text-ink"
+                  ? "rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white transition-colors"
+                  : "rounded-full border px-3 py-1 text-xs font-medium text-ink transition-colors hover:bg-surface-muted"
               }
               style={active ? undefined : { borderColor: "var(--color-hairline)" }}
             >

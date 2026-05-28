@@ -37,7 +37,7 @@ export function TagInput({
 
   return (
     <div
-      className="flex flex-wrap items-center gap-2 rounded-lg border bg-surface px-3 py-2"
+      className="flex flex-wrap items-center gap-2 rounded-lg border bg-surface px-3 py-2.5"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       {value.map((tag) => (
@@ -50,7 +50,7 @@ export function TagInput({
             type="button"
             aria-label={`remove ${tag}`}
             onClick={() => remove(tag)}
-            className="text-accent/70 hover:text-accent"
+            className="text-accent/70 transition-all duration-200 hover:text-accent active:scale-[0.98]"
           >
             ×
           </button>

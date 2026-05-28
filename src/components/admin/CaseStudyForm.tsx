@@ -30,7 +30,7 @@ const EMPTY: CaseStudyFormValues = {
   testimonialApproved: false,
 };
 
-const field = "w-full rounded-lg border px-3 py-2 text-sm";
+const field = "w-full rounded-lg border bg-surface px-3 py-2.5 text-sm";
 const fieldStyle = { borderColor: "var(--color-hairline)" };
 const sectionTitle = "text-sm font-semibold uppercase tracking-wide text-ink-muted";
 const fieldLabel = "block text-sm font-medium text-ink";
@@ -154,7 +154,7 @@ export function CaseStudyForm({
               />
             )}
             <label
-              className="cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium text-ink"
+              className="cursor-pointer rounded-lg border bg-surface px-3 py-2 text-sm font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98]"
               style={fieldStyle}
             >
               {uploading ? "Uploading…" : values.logoUrl ? "Change logo" : "Upload logo"}
@@ -177,7 +177,7 @@ export function CaseStudyForm({
               type="color"
               value={values.brandColour || "#000000"}
               onChange={(e) => set("brandColour", e.target.value)}
-              className="h-9 w-12 cursor-pointer rounded-lg border"
+              className="h-11 w-12 cursor-pointer rounded-lg border bg-surface"
               style={fieldStyle}
             />
             <input
@@ -384,7 +384,7 @@ export function CaseStudyForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+        className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
       >
         {pending ? "Saving…" : "Save"}
       </button>

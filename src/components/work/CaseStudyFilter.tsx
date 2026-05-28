@@ -11,7 +11,7 @@ const SERVICES: CaseStudyService[] = [
 ];
 
 export function CaseStudyFilter({ active }: { active: CaseStudyService | null }) {
-  const base = "rounded-full px-3 py-1.5 text-sm transition-colors";
+  const base = "rounded-full px-3 py-1.5 text-sm transition-colors active:scale-[0.98]";
   const activeStyle = "bg-accent text-white";
   const inactiveStyle = "border border-hairline text-ink-muted hover:text-ink";
 

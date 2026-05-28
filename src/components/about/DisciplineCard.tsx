@@ -11,7 +11,7 @@ export function DisciplineCard({
 }) {
   return (
     <div
-      className="rounded-card border bg-surface p-6"
+      className="rounded-card border bg-surface p-6 shadow-soft"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <div

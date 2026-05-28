@@ -26,27 +26,27 @@ export function ServicesEditor({
       {services.map((service, i) => (
         <div
           key={i}
-          className="rounded-lg border p-3"
+          className="rounded-card border p-3 shadow-soft"
           style={{ borderColor: "var(--color-hairline)" }}
         >
           <input
             value={service.name}
             onChange={(e) => update(i, { name: e.target.value })}
             placeholder="Service name"
-            className="w-full rounded border px-2 py-1.5 text-sm"
+            className="w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
             style={{ borderColor: "var(--color-hairline)" }}
           />
           <input
             value={service.description}
             onChange={(e) => update(i, { description: e.target.value })}
             placeholder="Description"
-            className="mt-2 w-full rounded border px-2 py-1.5 text-sm"
+            className="mt-2 w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
             style={{ borderColor: "var(--color-hairline)" }}
           />
           <button
             type="button"
             onClick={() => remove(i)}
-            className="mt-2 text-xs font-medium text-red-600"
+            className="mt-2 rounded-md text-xs font-medium text-red-600 transition-all duration-200 hover:text-red-700 active:scale-[0.98]"
           >
             Remove
           </button>
@@ -55,7 +55,7 @@ export function ServicesEditor({
       <button
         type="button"
         onClick={add}
-        className="rounded-lg border px-3 py-1.5 text-sm font-medium text-ink"
+        className="rounded-lg border bg-surface px-3 py-2 text-sm font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98]"
         style={{ borderColor: "var(--color-hairline)" }}
       >
         Add service

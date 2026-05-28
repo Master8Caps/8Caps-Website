@@ -16,7 +16,7 @@ export function ScreenshotGallery({
           alt={shot.altText ?? ""}
           width={1200}
           height={750}
-          className="rounded-card border"
+          className="rounded-card border shadow-soft"
           style={{ borderColor: "var(--color-hairline)" }}
         />
       ))}

@@ -33,7 +33,7 @@ export function DashboardBanner({
       </div>
       <Link
         href={adminHref("/products/new")}
-        className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
+        className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
       >
         + Add a product
       </Link>

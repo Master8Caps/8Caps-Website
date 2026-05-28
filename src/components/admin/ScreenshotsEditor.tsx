@@ -37,7 +37,7 @@ export function ScreenshotsEditor({
       {screenshots.map((shot, i) => (
         <div
           key={shot.imageUrl}
-          className="flex gap-3 rounded-lg border p-3"
+          className="flex gap-3 rounded-card border p-3 shadow-soft"
           style={{ borderColor: "var(--color-hairline)" }}
         >
           <Image
@@ -52,20 +52,20 @@ export function ScreenshotsEditor({
               value={shot.altText}
               onChange={(e) => update(i, e.target.value)}
               placeholder="Alt text"
-              className="w-full rounded border px-2 py-1.5 text-sm"
+              className="w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
               style={{ borderColor: "var(--color-hairline)" }}
             />
             <button
               type="button"
               onClick={() => remove(i)}
-              className="mt-2 text-xs font-medium text-red-600"
+              className="mt-2 rounded-md text-xs font-medium text-red-600 transition-all duration-200 hover:text-red-700 active:scale-[0.98]"
             >
               Remove
             </button>
           </div>
         </div>
       ))}
-      <label className="inline-block cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium text-ink"
+      <label className="inline-block cursor-pointer rounded-lg border bg-surface px-3 py-2 text-sm font-medium text-ink transition-all duration-200 hover:bg-surface-muted active:scale-[0.98]"
         style={{ borderColor: "var(--color-hairline)" }}>
         {uploading ? "Uploading…" : "Add screenshots"}
         <input

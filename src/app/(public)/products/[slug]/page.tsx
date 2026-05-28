@@ -69,7 +69,7 @@ export default async function SitePage({
                 {site.services.map((s) => (
                   <div
                     key={s.id}
-                    className="rounded-card border bg-surface p-4"
+                    className="rounded-card border bg-surface p-4 shadow-soft"
                     style={{ borderColor: "var(--color-hairline)" }}
                   >
                     <h3 className="font-semibold text-ink">{s.name}</h3>

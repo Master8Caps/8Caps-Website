@@ -26,25 +26,29 @@ export default async function AdminProductsPage({
         <h1 className="text-2xl font-bold text-ink">Products</h1>
         <Link
           href={adminPath(basePath, "/products/new")}
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
         >
           Add a product
         </Link>
       </div>
 
-      <form method="get" className="mt-6">
+      <form method="get" className="mt-6 max-w-sm">
+        <label htmlFor="product-search" className="block text-sm font-medium text-ink">
+          Search
+        </label>
         <input
+          id="product-search"
           type="search"
           name="q"
           defaultValue={q ?? ""}
           placeholder="Search by name…"
-          className="w-full max-w-sm rounded-lg border bg-surface px-3 py-2 text-sm"
+          className="mt-1 w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
           style={{ borderColor: "var(--color-hairline)" }}
         />
       </form>
 
       <div
-        className="mt-6 overflow-hidden rounded-card border bg-surface"
+        className="mt-6 overflow-hidden rounded-card border bg-surface shadow-soft"
         style={{ borderColor: "var(--color-hairline)" }}
       >
         <table className="w-full text-sm">
@@ -68,7 +72,7 @@ export default async function AdminProductsPage({
             {sites.map((s) => (
               <tr
                 key={s.id}
-                className="border-b last:border-0"
+                className="border-b transition-colors last:border-0 hover:bg-surface-muted"
                 style={{ borderColor: "var(--color-hairline)" }}
               >
                 <td className="px-4 py-3 font-medium text-ink">{s.name}</td>
@@ -90,7 +94,7 @@ export default async function AdminProductsPage({
                 <td className="px-4 py-3 text-right">
                   <Link
                     href={adminPath(basePath, `/products/${s.id}/edit`)}
-                    className="font-semibold text-accent"
+                    className="font-semibold text-accent transition-colors hover:text-oxford"
                   >
                     Edit
                   </Link>
