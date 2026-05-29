@@ -51,7 +51,7 @@ export function Sidebar({
           className="flex items-center gap-2"
           onClick={() => setOpen(false)}
         >
-          <Logo variant="lockup" className="h-6 w-auto" />
+          <Logo variant="lockup" className="h-8 w-auto" />
           <span className="text-xs font-semibold uppercase tracking-wide text-white/55">
             Admin
           </span>
@@ -87,7 +87,7 @@ export function Sidebar({
             className="flex items-center gap-2"
             onClick={() => setOpen(false)}
           >
-            <Logo variant="lockup" className="h-6 w-auto" />
+            <Logo variant="lockup" className="h-8 w-auto" />
             <span className="text-xs font-semibold uppercase tracking-wide text-white/55">
               Admin
             </span>

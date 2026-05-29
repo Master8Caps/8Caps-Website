@@ -9,7 +9,7 @@ export function Footer() {
         {/* Top row: logo + copyright on the left, primary nav on the right */}
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
           <div className="flex items-center gap-2.5">
-            <Logo variant="mark" className="h-6 w-auto" />
+            <Logo variant="mark" className="h-8 w-auto" />
             <p>© {new Date().getFullYear()} 8Caps. All rights reserved.</p>
           </div>
           <div className="flex flex-wrap gap-5">

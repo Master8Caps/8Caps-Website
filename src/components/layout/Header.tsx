@@ -24,7 +24,7 @@ export function Header() {
           className="flex items-center"
           onClick={() => setOpen(false)}
         >
-          <Logo variant="lockup" className="h-7 w-auto" />
+          <Logo variant="lockup" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop nav */}
