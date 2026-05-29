@@ -61,6 +61,25 @@ describe("siteFormSchema", () => {
       siteFormSchema.safeParse({ ...validSite, slug: "" }).success,
     ).toBe(false);
   });
+
+  it("accepts Postgres-lenient UUIDs for categoryId and tagIds", () => {
+    // Seed/placeholder ids like this are valid in a Postgres `uuid` column
+    // but fail zod v4's RFC-strict .uuid(); the form must accept them.
+    const seed = "11111111-1111-1111-1111-111111111101";
+    const result = siteFormSchema.safeParse({
+      ...validSite,
+      categoryId: seed,
+      tagIds: [seed],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("still rejects a categoryId that isn't UUID-shaped", () => {
+    expect(
+      siteFormSchema.safeParse({ ...validSite, categoryId: "not-a-uuid" })
+        .success,
+    ).toBe(false);
+  });
 });
 
 describe("siteFormSchema — newCategoryName", () => {

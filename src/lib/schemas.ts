@@ -25,7 +25,9 @@ export const siteFormSchema = z.object({
   shortSummary: z.string().min(1, "Short summary is required"),
   fullOverview: z.string(),
   targetAudience: z.string(),
-  categoryId: z.string().uuid().nullable(),
+  // z.guid() (lenient: any 8-4-4-4-12 hex) not z.uuid() (RFC-strict in zod v4),
+  // so Postgres-valid placeholder/seed ids like 1111…-1101 are accepted.
+  categoryId: z.guid().nullable(),
   newCategoryName: z.string().nullable(),
   publishStatus: z.enum(["draft", "published", "archived"]),
   lifecycle: z.enum(["live", "coming_soon"]),
@@ -35,7 +37,7 @@ export const siteFormSchema = z.object({
   seoDescription: z.string(),
   services: z.array(serviceSchema),
   screenshots: z.array(screenshotSchema),
-  tagIds: z.array(z.string().uuid()),
+  tagIds: z.array(z.guid()),
 });
 
 export const categoryRenameSchema = z.object({
