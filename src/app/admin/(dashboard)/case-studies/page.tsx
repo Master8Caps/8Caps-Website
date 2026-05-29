@@ -3,6 +3,7 @@ import { getAdminCaseStudies } from "@/lib/data/admin";
 import { getAdminBasePath } from "@/lib/admin-paths.server";
 import { adminPath } from "@/lib/admin-paths";
 import { CaseStudyList } from "@/components/admin/CaseStudyList";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const FILTER_OPTIONS = [
   { value: "", label: "All" },
@@ -35,15 +36,17 @@ export default async function AdminCaseStudiesPage({
 
   return (
     <div className="p-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-ink">Case studies</h1>
-        <Link
-          href={adminPath(basePath, "/case-studies/new")}
-          className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
-        >
-          + Add case study
-        </Link>
-      </div>
+      <PageHeader
+        title="Case studies"
+        action={
+          <Link
+            href={adminPath(basePath, "/case-studies/new")}
+            className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
+          >
+            + Add case study
+          </Link>
+        }
+      />
 
       <form method="get" className="mt-6 max-w-sm">
         <label htmlFor="case-study-search" className="block text-sm font-medium text-ink">

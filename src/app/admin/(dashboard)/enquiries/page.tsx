@@ -3,6 +3,7 @@ import { getAdminEnquiries } from "@/lib/data/enquiries";
 import { getAdminBasePath } from "@/lib/admin-paths.server";
 import { adminPath } from "@/lib/admin-paths";
 import { EnquiryList } from "@/components/admin/EnquiryList";
+import { PageHeader } from "@/components/admin/PageHeader";
 import type { EnquiryStatus } from "@/types/domain";
 
 const FILTER_OPTIONS = [
@@ -30,10 +31,10 @@ export default async function AdminEnquiriesPage({
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold text-ink">Enquiries</h1>
-      <p className="mt-2 text-sm text-ink-muted">
-        Messages from the website contact form.
-      </p>
+      <PageHeader
+        title="Enquiries"
+        description="Messages from the website contact form."
+      />
 
       <div className="mt-6 flex flex-wrap gap-2">
         {FILTER_OPTIONS.map((option) => {

@@ -26,7 +26,7 @@ export function EnquiryList({ rows }: { rows: AdminEnquiry[] }) {
 
   return (
     <div
-      className="overflow-hidden rounded-card border bg-surface"
+      className="overflow-hidden rounded-card border bg-surface shadow-soft"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <table className="w-full text-sm">
@@ -48,7 +48,7 @@ export function EnquiryList({ rows }: { rows: AdminEnquiry[] }) {
             return (
               <tr
                 key={row.id}
-                className="border-b last:border-0"
+                className="border-b transition-colors last:border-0 hover:bg-surface-muted"
                 style={{ borderColor: "var(--color-hairline)" }}
               >
                 <td className="px-4 py-3">

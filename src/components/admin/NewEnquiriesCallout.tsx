@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Mail } from "lucide-react";
 import { useAdminPath } from "./AdminPathContext";
 
 export function NewEnquiriesCallout({ count }: { count: number }) {
@@ -11,8 +12,11 @@ export function NewEnquiriesCallout({ count }: { count: number }) {
 
   return (
     <div className="flex items-center justify-between gap-4 rounded-card border border-sky-300 bg-sky-50 p-4 text-sm text-sky-900">
-      <span>
-        📨 <strong>{count} new {noun}</strong> from the contact form
+      <span className="flex items-center gap-2.5">
+        <Mail className="h-5 w-5 shrink-0 text-sky-600" aria-hidden="true" />
+        <span>
+          <strong>{count} new {noun}</strong> from the contact form
+        </span>
       </span>
       <Link
         href={`${adminHref("/enquiries")}?status=new`}

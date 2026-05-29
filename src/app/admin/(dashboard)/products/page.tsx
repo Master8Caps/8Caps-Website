@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAdminSites } from "@/lib/data/admin";
 import { getAdminBasePath } from "@/lib/admin-paths.server";
 import { adminPath } from "@/lib/admin-paths";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const STATUS_STYLE: Record<string, string> = {
   published: "bg-live-bg text-live",
@@ -22,15 +23,17 @@ export default async function AdminProductsPage({
 
   return (
     <div className="p-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-ink">Products</h1>
-        <Link
-          href={adminPath(basePath, "/products/new")}
-          className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
-        >
-          Add a product
-        </Link>
-      </div>
+      <PageHeader
+        title="Products"
+        action={
+          <Link
+            href={adminPath(basePath, "/products/new")}
+            className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:brightness-110 hover:shadow-lift active:scale-[0.98]"
+          >
+            Add a product
+          </Link>
+        }
+      />
 
       <form method="get" className="mt-6 max-w-sm">
         <label htmlFor="product-search" className="block text-sm font-medium text-ink">

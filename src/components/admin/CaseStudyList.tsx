@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Clock, CheckCircle2, Star, type LucideIcon } from "lucide-react";
 import { statusFor } from "@/lib/case-study-status";
 import type { AdminCaseStudyRow, CaseStudyStatus } from "@/types/case-study";
 import { useAdminPath } from "./AdminPathContext";
@@ -14,10 +15,15 @@ const STATUS_STYLE: Record<CaseStudyStatus, string> = {
 };
 
 const STATUS_LABEL: Record<CaseStudyStatus, string> = {
-  pending: "🟡 Pending",
-  live: "✅ Live",
+  pending: "Pending",
+  live: "Live",
   draft: "Draft",
   archived: "Archived",
+};
+
+const STATUS_ICON: Partial<Record<CaseStudyStatus, LucideIcon>> = {
+  pending: Clock,
+  live: CheckCircle2,
 };
 
 export function CaseStudyList({ rows }: { rows: AdminCaseStudyRow[] }) {
@@ -36,7 +42,7 @@ export function CaseStudyList({ rows }: { rows: AdminCaseStudyRow[] }) {
 
   return (
     <div
-      className="overflow-hidden rounded-card border bg-surface"
+      className="overflow-hidden rounded-card border bg-surface shadow-soft"
       style={{ borderColor: "var(--color-hairline)" }}
     >
       <table className="w-full text-sm">
@@ -56,10 +62,11 @@ export function CaseStudyList({ rows }: { rows: AdminCaseStudyRow[] }) {
         <tbody>
           {rows.map((row) => {
             const status = statusFor(row);
+            const StatusIcon = STATUS_ICON[status];
             return (
               <tr
                 key={row.id}
-                className="border-b last:border-0"
+                className="border-b transition-colors last:border-0 hover:bg-surface-muted"
                 style={{ borderColor: "var(--color-hairline)" }}
               >
                 <td className="px-4 py-3 font-medium text-ink">
@@ -73,12 +80,22 @@ export function CaseStudyList({ rows }: { rows: AdminCaseStudyRow[] }) {
                 <td className="px-4 py-3 text-ink-muted">{row.clientSector ?? "—"}</td>
                 <td className="px-4 py-3 text-ink-muted">{row.year ?? "—"}</td>
                 <td className="px-4 py-3 text-ink-muted">
-                  {row.isFeatured ? "⭐" : "—"}
+                  {row.isFeatured ? (
+                    <Star
+                      className="h-4 w-4 fill-soon text-soon"
+                      aria-label="Featured"
+                    />
+                  ) : (
+                    "—"
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLE[status]}`}
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLE[status]}`}
                   >
+                    {StatusIcon && (
+                      <StatusIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                    )}
                     {STATUS_LABEL[status]}
                   </span>
                 </td>

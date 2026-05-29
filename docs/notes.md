@@ -1,6 +1,18 @@
 # 📒 Notes for Next Session
 
-Last updated: 2026-05-28
+Last updated: 2026-05-29
+
+---
+
+## ✅ Shipped in the latest session (2026-05-29)
+
+- **Admin Dashboard `ui-ux-pro-max` full pass** — visual + UX elevation of the whole admin shell:
+  - **Sidebar** — active-page highlight (`bg-white/10` + accent left bar + `aria-current="page"`), lucide icons on every nav item, and a **responsive mobile drawer** (fixed top bar + hamburger + scrim below `lg`; static sidebar at `lg+`).
+  - **No more emoji as icons** — `PendingApprovalCallout`/`NewEnquiriesCallout` (⚠️/📨) and case-study statuses (🟡/✅/⭐) now use lucide SVGs (`AlertTriangle`, `Mail`, `Clock`, `CheckCircle2`, `Star`).
+  - **Table consistency** — Enquiries & Case-studies tables gained `shadow-soft` + row hover to match Products.
+  - **Shared `PageHeader`** component rolled across Products / Case studies / Enquiries / Categories for consistent title/description/action tops.
+  - Layout switched to `min-h-dvh`; content clears the mobile top bar with `pt-14 lg:pt-0`.
+  - All 180 tests still pass; typecheck clean; no new lint issues.
 
 ---
 
@@ -30,7 +42,7 @@ Last updated: 2026-05-28
 
 ### 🧰 Admin Dashboard
 
-- [ ] **UI/UX revamp** — full visual pass (own session, paired with the public-site revamp below using `ui-ux-pro-max`)
+- [x] **UI/UX revamp** — `ui-ux-pro-max` full pass shipped 2026-05-29 (sidebar active-state + lucide icons + responsive mobile drawer; de-emoji'd callouts & case-study statuses; table consistency; shared `PageHeader`). See the changelog at the top.
 - [x] **Enquiries inbox** — shipped 2026-05-28 (list + detail, mark-read/unread, archive, badge + callout)
 - [x] **Case studies admin** `revalidatePath` after approve — dashboard count now updates without hard refresh
 - [ ] **Case studies admin** small polish: empty-state on `/case-studies` filter chips (the enquiries list has one; case-studies still lacks a per-filter empty state)
@@ -70,7 +82,7 @@ Last updated: 2026-05-28
 ### 🎨 UI/UX full passthrough (its own session)
 
 - [ ] **Public site** — use `ui-ux-pro-max` for a full design review of all pages (now includes the new `/work/[slug]` detail pages + Privacy)
-- [ ] **Admin Dashboard** — same treatment (now includes the new enquiries inbox)
+- [x] **Admin Dashboard** — full `ui-ux-pro-max` pass shipped 2026-05-29 (see Admin Dashboard section above)
 - [ ] **Mobile responsive verification** — real devices, not just dev tools
 - [ ] **Accessibility pass** — colour contrast, focus states, ARIA on the contact form
 
