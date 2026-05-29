@@ -45,13 +45,13 @@ export function Sidebar({
   return (
     <>
       {/* Mobile top bar — visible below lg, where the sidebar is a drawer */}
-      <div className="fixed inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b border-white/10 bg-oxford px-4 text-white lg:hidden">
+      <div className="fixed inset-x-0 top-0 z-30 flex h-16 items-center justify-between border-b border-white/10 bg-oxford px-4 text-white lg:hidden">
         <Link
           href={adminHref("/")}
           className="flex items-center gap-2"
           onClick={() => setOpen(false)}
         >
-          <Logo variant="lockup" className="h-8 w-auto" />
+          <Logo variant="lockup" className="h-12 w-auto" />
           <span className="text-xs font-semibold uppercase tracking-wide text-white/55">
             Admin
           </span>
@@ -87,7 +87,7 @@ export function Sidebar({
             className="flex items-center gap-2"
             onClick={() => setOpen(false)}
           >
-            <Logo variant="lockup" className="h-8 w-auto" />
+            <Logo variant="lockup" className="h-12 w-auto" />
             <span className="text-xs font-semibold uppercase tracking-wide text-white/55">
               Admin
             </span>

@@ -18,13 +18,13 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-oxford">
-      <Container className="flex h-16 items-center justify-between">
+      <Container className="flex h-20 items-center justify-between">
         <Link
           href="/"
           className="flex items-center"
           onClick={() => setOpen(false)}
         >
-          <Logo variant="lockup" className="h-10 w-auto" />
+          <Logo variant="lockup" className="h-15 w-auto" />
         </Link>
 
         {/* Desktop nav */}

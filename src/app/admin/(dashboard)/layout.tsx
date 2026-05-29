@@ -28,7 +28,7 @@ export default async function AdminLayout({
     <AdminPathProvider basePath={basePath}>
       <div className="flex min-h-dvh bg-surface-muted text-ink">
         <Sidebar email={user.email ?? ""} newEnquiries={newEnquiries} />
-        <div className="flex-1 overflow-x-auto pt-14 lg:pt-0">{children}</div>
+        <div className="flex-1 overflow-x-auto pt-16 lg:pt-0">{children}</div>
       </div>
     </AdminPathProvider>
   );
