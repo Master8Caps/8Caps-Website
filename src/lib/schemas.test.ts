@@ -16,11 +16,13 @@ const validSite = {
   lifecycle: "live",
   visibility: "public",
   isFeatured: false,
+  sortOrder: 0,
   seoTitle: "",
   seoDescription: "",
   services: [],
   screenshots: [],
   tagIds: [],
+  newTags: [],
 };
 
 describe("siteFormSchema", () => {
@@ -79,6 +81,19 @@ describe("siteFormSchema", () => {
       siteFormSchema.safeParse({ ...validSite, categoryId: "not-a-uuid" })
         .success,
     ).toBe(false);
+  });
+
+  it("rejects a negative sortOrder", () => {
+    expect(
+      siteFormSchema.safeParse({ ...validSite, sortOrder: -1 }).success,
+    ).toBe(false);
+  });
+
+  it("accepts new tag names to create", () => {
+    expect(
+      siteFormSchema.safeParse({ ...validSite, newTags: ["Property", "AI"] })
+        .success,
+    ).toBe(true);
   });
 });
 

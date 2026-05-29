@@ -188,6 +188,7 @@ export async function getFeaturedSites(limit = 3): Promise<SiteSummary[]> {
     .from("sites")
     .select(SUMMARY_COLUMNS)
     .eq("is_featured", true)
+    .order("sort_order", { ascending: true })
     .order("name")
     .limit(limit);
 

@@ -14,6 +14,7 @@ import { useUpload } from "@/lib/use-upload";
 import { ServicesEditor } from "./ServicesEditor";
 import { ScreenshotsEditor } from "./ScreenshotsEditor";
 import { TagSelector } from "./TagSelector";
+import { TagInput } from "./TagInput";
 import { UrlAnalyzer } from "./UrlAnalyzer";
 import type { AnalysisResult } from "@/types/onboarding";
 
@@ -31,11 +32,13 @@ const EMPTY: SiteFormValues = {
   lifecycle: "live",
   visibility: "public",
   isFeatured: false,
+  sortOrder: 0,
   seoTitle: "",
   seoDescription: "",
   services: [],
   screenshots: [],
   tagIds: [],
+  newTags: [],
 };
 
 const field = "w-full rounded-lg border bg-surface px-3 py-2.5 text-sm";
@@ -324,6 +327,28 @@ export function SiteForm({
           />
           Featured on the homepage
         </label>
+        {values.isFeatured && (
+          <div>
+            <label
+              htmlFor="sort-order"
+              className="block text-sm font-medium text-ink"
+            >
+              Featured order
+            </label>
+            <input
+              id="sort-order"
+              type="number"
+              min={0}
+              value={values.sortOrder}
+              onChange={(e) => set("sortOrder", Number(e.target.value) || 0)}
+              className={`mt-1 w-28 ${field}`}
+              style={fieldStyle}
+            />
+            <p className="mt-1 text-xs text-ink-muted">
+              Lower numbers show first among featured products on the homepage.
+            </p>
+          </div>
+        )}
       </section>
 
       {/* SEO */}
@@ -372,6 +397,21 @@ export function SiteForm({
           selected={values.tagIds}
           onChange={(next) => set("tagIds", next)}
         />
+        <div>
+          <label className="block text-sm font-medium text-ink">
+            Create new tags
+          </label>
+          <div className="mt-1">
+            <TagInput
+              value={values.newTags}
+              onChange={(next) => set("newTags", next)}
+              placeholder="Type a tag and press Enter…"
+            />
+          </div>
+          <p className="mt-1 text-xs text-ink-muted">
+            New tags are created when you save and attached to this product.
+          </p>
+        </div>
       </section>
 
       {error && <p className="text-sm text-red-600">{error}</p>}

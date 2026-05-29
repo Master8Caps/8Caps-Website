@@ -22,11 +22,13 @@ const withProposal: SiteFormValues = {
   lifecycle: "live",
   visibility: "public",
   isFeatured: false,
+  sortOrder: 0,
   seoTitle: "",
   seoDescription: "",
   services: [],
   screenshots: [],
   tagIds: [],
+  newTags: [],
 };
 
 describe("SiteForm category", () => {
@@ -88,5 +90,43 @@ describe("SiteForm category", () => {
       "__new_category__",
     );
     expect(screen.getByLabelText(/new category name/i)).toBeInTheDocument();
+  });
+});
+
+describe("SiteForm featured order & tags", () => {
+  it("hides the featured-order field unless the product is featured", () => {
+    render(
+      <SiteForm
+        initial={withProposal}
+        categories={categories}
+        allTags={[]}
+        onSubmit={async () => ({ ok: true })}
+      />,
+    );
+    expect(screen.queryByLabelText(/featured order/i)).toBeNull();
+  });
+
+  it("shows the featured-order field when the product is featured", () => {
+    render(
+      <SiteForm
+        initial={{ ...withProposal, isFeatured: true }}
+        categories={categories}
+        allTags={[]}
+        onSubmit={async () => ({ ok: true })}
+      />,
+    );
+    expect(screen.getByLabelText(/featured order/i)).toBeInTheDocument();
+  });
+
+  it("offers a field to create new tags", () => {
+    render(
+      <SiteForm
+        initial={withProposal}
+        categories={categories}
+        allTags={[]}
+        onSubmit={async () => ({ ok: true })}
+      />,
+    );
+    expect(screen.getByPlaceholderText(/type a tag/i)).toBeInTheDocument();
   });
 });

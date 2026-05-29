@@ -95,6 +95,7 @@ function toSiteRow(values: SiteFormValues) {
     lifecycle: values.lifecycle,
     visibility: values.visibility,
     is_featured: values.isFeatured,
+    sort_order: values.sortOrder,
     seo_title: values.seoTitle || null,
     seo_description: values.seoDescription || null,
   };
@@ -139,6 +140,52 @@ async function resolveCategoryId(
   return { ok: true, categoryId: created.data.id };
 }
 
+type TagResolution =
+  | { ok: true; tagIds: string[] }
+  | { ok: false; error: string };
+
+/**
+ * Resolve the full set of tag ids for a site: the already-selected `tagIds`
+ * plus any `newTags` names, each matched to an existing tag by slug
+ * (case-insensitive) or created fresh. Returns a de-duplicated list.
+ */
+async function resolveTagIds(
+  supabase: Awaited<ReturnType<typeof createServerSupabase>>,
+  values: SiteFormValues,
+): Promise<TagResolution> {
+  const ids = new Set(values.tagIds);
+
+  for (const raw of values.newTags) {
+    const name = raw.trim();
+    if (!name) continue;
+    const slug = slugify(name);
+
+    const existing = await supabase
+      .from("tags")
+      .select("id")
+      .eq("slug", slug)
+      .limit(1)
+      .maybeSingle();
+    if (existing.error) return { ok: false, error: existing.error.message };
+    if (existing.data) {
+      ids.add(existing.data.id);
+      continue;
+    }
+
+    const created = await supabase
+      .from("tags")
+      .insert({ name, slug })
+      .select("id")
+      .single();
+    if (created.error) {
+      return { ok: false, error: `Could not create tag: ${created.error.message}` };
+    }
+    ids.add(created.data.id);
+  }
+
+  return { ok: true, tagIds: [...ids] };
+}
+
 export async function createSite(values: SiteFormValues): Promise<ActionResult> {
   const parsed = siteFormSchema.safeParse(values);
   if (!parsed.success) {
@@ -148,6 +195,9 @@ export async function createSite(values: SiteFormValues): Promise<ActionResult> 
   const supabase = await createServerSupabase();
   const category = await resolveCategoryId(supabase, parsed.data);
   if (!category.ok) return { ok: false, error: category.error };
+
+  const tags = await resolveTagIds(supabase, parsed.data);
+  if (!tags.ok) return { ok: false, error: tags.error };
 
   const { data, error } = await supabase
     .from("sites")
@@ -159,7 +209,10 @@ export async function createSite(values: SiteFormValues): Promise<ActionResult> 
     return { ok: false, error: `Could not create site: ${error.message}` };
   }
 
-  const childError = await writeChildren(supabase, data.id, parsed.data);
+  const childError = await writeChildren(supabase, data.id, {
+    ...parsed.data,
+    tagIds: tags.tagIds,
+  });
   if (childError) {
     return { ok: false, error: `Site saved, but related data failed: ${childError}` };
   }
@@ -181,6 +234,9 @@ export async function updateSite(
   const category = await resolveCategoryId(supabase, parsed.data);
   if (!category.ok) return { ok: false, error: category.error };
 
+  const tags = await resolveTagIds(supabase, parsed.data);
+  if (!tags.ok) return { ok: false, error: tags.error };
+
   const { error } = await supabase
     .from("sites")
     .update({ ...toSiteRow(parsed.data), category_id: category.categoryId })
@@ -190,7 +246,10 @@ export async function updateSite(
     return { ok: false, error: `Could not update site: ${error.message}` };
   }
 
-  const childError = await writeChildren(supabase, id, parsed.data);
+  const childError = await writeChildren(supabase, id, {
+    ...parsed.data,
+    tagIds: tags.tagIds,
+  });
   if (childError) {
     return { ok: false, error: `Site saved, but related data failed: ${childError}` };
   }

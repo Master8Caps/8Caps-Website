@@ -33,11 +33,13 @@ export const siteFormSchema = z.object({
   lifecycle: z.enum(["live", "coming_soon"]),
   visibility: z.enum(["public", "private"]),
   isFeatured: z.boolean(),
+  sortOrder: z.number().int().min(0),
   seoTitle: z.string(),
   seoDescription: z.string(),
   services: z.array(serviceSchema),
   screenshots: z.array(screenshotSchema),
   tagIds: z.array(z.guid()),
+  newTags: z.array(z.string()),
 });
 
 export const categoryRenameSchema = z.object({

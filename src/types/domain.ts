@@ -107,11 +107,14 @@ export interface SiteFormValues {
   lifecycle: SiteLifecycle;
   visibility: SiteVisibility;
   isFeatured: boolean;
+  sortOrder: number;
   seoTitle: string;
   seoDescription: string;
   services: ServiceInput[];
   screenshots: ScreenshotInput[];
   tagIds: string[];
+  /** Names of brand-new tags to create on save and attach to this product. */
+  newTags: string[];
 }
 
 /** A site row in the admin list view. */

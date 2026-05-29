@@ -121,6 +121,7 @@ interface SiteEditRaw {
   lifecycle: SiteFormValues["lifecycle"];
   visibility: SiteFormValues["visibility"];
   is_featured: boolean;
+  sort_order: number;
   seo_title: string | null;
   seo_description: string | null;
   services: { name: string; description: string | null; sort_order: number }[];
@@ -137,7 +138,7 @@ export async function getSiteForEdit(
     .from("sites")
     .select(
       "name, slug, url, logo_url, short_summary, full_overview, target_audience, " +
-        "category_id, publish_status, lifecycle, visibility, is_featured, " +
+        "category_id, publish_status, lifecycle, visibility, is_featured, sort_order, " +
         "seo_title, seo_description, " +
         "services (name, description, sort_order), " +
         "screenshots (image_url, alt_text, sort_order), " +
@@ -164,6 +165,7 @@ export async function getSiteForEdit(
     lifecycle: row.lifecycle,
     visibility: row.visibility,
     isFeatured: row.is_featured,
+    sortOrder: row.sort_order,
     seoTitle: row.seo_title ?? "",
     seoDescription: row.seo_description ?? "",
     services: [...row.services]
@@ -173,6 +175,7 @@ export async function getSiteForEdit(
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((s) => ({ imageUrl: s.image_url, altText: s.alt_text ?? "" })),
     tagIds: row.site_tags.map((t) => t.tag_id),
+    newTags: [],
   };
 }
 
