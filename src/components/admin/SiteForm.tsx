@@ -60,6 +60,11 @@ export function SiteForm({
   enableUrlAnalysis?: boolean;
 }) {
   const [values, setValues] = useState<SiteFormValues>(initial ?? EMPTY);
+  // Mirror the sort-order input as raw text so the field can be cleared while
+  // typing (a numeric value would coerce an empty field straight back to 0).
+  const [sortOrderText, setSortOrderText] = useState(
+    String((initial ?? EMPTY).sortOrder),
+  );
   const [slugEdited, setSlugEdited] = useState(Boolean(initial));
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -339,8 +344,13 @@ export function SiteForm({
               id="sort-order"
               type="number"
               min={0}
-              value={values.sortOrder}
-              onChange={(e) => set("sortOrder", Number(e.target.value) || 0)}
+              value={sortOrderText}
+              onChange={(e) => {
+                const text = e.target.value;
+                setSortOrderText(text);
+                set("sortOrder", text === "" ? 0 : Math.max(0, Number(text) || 0));
+              }}
+              onBlur={() => setSortOrderText(String(values.sortOrder))}
               className={`mt-1 w-28 ${field}`}
               style={fieldStyle}
             />
