@@ -65,7 +65,11 @@ export function decideRoute(host: string, pathname: string): RouteDecision {
     let internalPath: string;
     if (pathname === "/") {
       internalPath = "/admin";
-    } else if (pathname.startsWith("/admin")) {
+    } else if (pathname.startsWith("/admin") || pathname.startsWith("/api/")) {
+      // `/admin/*` is already correct. `/api/*` routes are global — they live
+      // at their real path, not inside the `/admin` page route-group — so they
+      // must pass through unprefixed. Prefixing them yields a 404 (e.g.
+      // `/api/admin/analyze-url` → `/admin/api/admin/analyze-url`).
       internalPath = pathname;
     } else {
       internalPath = "/admin" + pathname;

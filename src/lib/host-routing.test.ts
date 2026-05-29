@@ -30,6 +30,15 @@ describe("decideRoute — admin subdomain", () => {
     });
   });
 
+  it("keeps /api/* routes at their real path (they are global, not in the admin group)", () => {
+    expect(
+      decideRoute("admin.8caps.co.uk", "/api/admin/analyze-url"),
+    ).toEqual({
+      kind: "admin-subdomain",
+      internalPath: "/api/admin/analyze-url",
+    });
+  });
+
   it("matches the host case-insensitively", () => {
     expect(decideRoute("Admin.8Caps.CO.UK", "/enquiries")).toEqual({
       kind: "admin-subdomain",
