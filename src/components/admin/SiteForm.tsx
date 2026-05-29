@@ -61,13 +61,6 @@ export function SiteForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const { upload, uploading } = useUpload();
-  // `proposedCategory` keeps the AI's proposed new category available as a
-  // dropdown option even after the admin toggles to an existing category.
-  // It must stay in sync with `values.newCategoryName` — both are set together
-  // in `applyAnalysis`; the select's onChange only ever moves between them.
-  const [proposedCategory, setProposedCategory] = useState<string | null>(
-    initial?.newCategoryName ?? null,
-  );
 
   function set<K extends keyof SiteFormValues>(key: K, value: SiteFormValues[K]) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -105,7 +98,6 @@ export function SiteForm({
     const category = categories.find(
       (c) => c.slug === result.suggestedCategorySlug,
     );
-    setProposedCategory(result.suggestedNewCategory);
     const tagIds = allTags
       .filter((t) => result.suggestedTagSlugs.includes(t.slug))
       .map((t) => t.id);
@@ -221,41 +213,73 @@ export function SiteForm({
       {/* Classification */}
       <section className="space-y-3">
         <h2 className={sectionTitle}>Classification</h2>
-        <select
-          value={
-            values.newCategoryName ? NEW_CATEGORY : values.categoryId ?? ""
-          }
-          onChange={(e) => {
-            const v = e.target.value;
-            if (v === NEW_CATEGORY) {
-              setValues((prev) => ({
-                ...prev,
-                categoryId: null,
-                newCategoryName: proposedCategory,
-              }));
-            } else {
-              setValues((prev) => ({
-                ...prev,
-                categoryId: v || null,
-                newCategoryName: null,
-              }));
+        <div>
+          <label
+            htmlFor="category-select"
+            className="block text-sm font-medium text-ink"
+          >
+            Category
+          </label>
+          <select
+            id="category-select"
+            value={
+              values.newCategoryName !== null
+                ? NEW_CATEGORY
+                : values.categoryId ?? ""
             }
-          }}
-          className={field}
-          style={fieldStyle}
-        >
-          <option value="">No category</option>
-          {proposedCategory && (
-            <option value={NEW_CATEGORY}>
-              ✨ {proposedCategory} — new category
-            </option>
-          )}
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === NEW_CATEGORY) {
+                setValues((prev) => ({
+                  ...prev,
+                  categoryId: null,
+                  // Keep any AI-proposed name; otherwise start with a blank
+                  // field for the admin to type their own.
+                  newCategoryName: prev.newCategoryName ?? "",
+                }));
+              } else {
+                setValues((prev) => ({
+                  ...prev,
+                  categoryId: v || null,
+                  newCategoryName: null,
+                }));
+              }
+            }}
+            className={`mt-1 ${field}`}
+            style={fieldStyle}
+          >
+            <option value="">No category</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+            <option value={NEW_CATEGORY}>+ Add a new category…</option>
+          </select>
+        </div>
+        {values.newCategoryName !== null && (
+          <div>
+            <label
+              htmlFor="new-category-name"
+              className="block text-sm font-medium text-ink"
+            >
+              New category name
+            </label>
+            <input
+              id="new-category-name"
+              autoFocus
+              value={values.newCategoryName}
+              onChange={(e) => set("newCategoryName", e.target.value)}
+              placeholder="e.g. Property tools"
+              className={`mt-1 ${field}`}
+              style={fieldStyle}
+            />
+            <p className="mt-1 text-xs text-ink-muted">
+              Created when you save. If a category with this name already
+              exists, the existing one is reused.
+            </p>
+          </div>
+        )}
         <div className="grid grid-cols-3 gap-3">
           <select
             value={values.publishStatus}

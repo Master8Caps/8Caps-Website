@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { SiteForm } from "./SiteForm";
 import type { Category, SiteFormValues } from "@/types/domain";
 
@@ -28,22 +29,8 @@ const withProposal: SiteFormValues = {
   tagIds: [],
 };
 
-describe("SiteForm category select", () => {
-  it("shows a 'new category' option when newCategoryName is set", () => {
-    render(
-      <SiteForm
-        initial={withProposal}
-        categories={categories}
-        allTags={[]}
-        onSubmit={async () => ({ ok: true })}
-      />,
-    );
-    expect(
-      screen.getByRole("option", { name: /Trades — new category/ }),
-    ).toBeInTheDocument();
-  });
-
-  it("does not show a 'new category' option when newCategoryName is null", () => {
+describe("SiteForm category", () => {
+  it("always offers an option to add a new category", () => {
     render(
       <SiteForm
         initial={{ ...withProposal, newCategoryName: null }}
@@ -52,6 +39,54 @@ describe("SiteForm category select", () => {
         onSubmit={async () => ({ ok: true })}
       />,
     );
-    expect(screen.queryByRole("option", { name: /new category/ })).toBeNull();
+    expect(
+      screen.getByRole("option", { name: /add a new category/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("shows an editable, pre-filled name field when a new category is set", () => {
+    render(
+      <SiteForm
+        initial={withProposal}
+        categories={categories}
+        allTags={[]}
+        onSubmit={async () => ({ ok: true })}
+      />,
+    );
+    expect(screen.getByLabelText(/new category name/i)).toHaveValue("Trades");
+  });
+
+  it("hides the name field when an existing category is selected", () => {
+    render(
+      <SiteForm
+        initial={{
+          ...withProposal,
+          newCategoryName: null,
+          categoryId: categories[0].id,
+        }}
+        categories={categories}
+        allTags={[]}
+        onSubmit={async () => ({ ok: true })}
+      />,
+    );
+    expect(screen.queryByLabelText(/new category name/i)).toBeNull();
+  });
+
+  it("reveals the name field when 'Add a new category' is chosen", async () => {
+    const user = userEvent.setup();
+    render(
+      <SiteForm
+        initial={{ ...withProposal, newCategoryName: null }}
+        categories={categories}
+        allTags={[]}
+        onSubmit={async () => ({ ok: true })}
+      />,
+    );
+    expect(screen.queryByLabelText(/new category name/i)).toBeNull();
+    await user.selectOptions(
+      screen.getByLabelText("Category"),
+      "__new_category__",
+    );
+    expect(screen.getByLabelText(/new category name/i)).toBeInTheDocument();
   });
 });
