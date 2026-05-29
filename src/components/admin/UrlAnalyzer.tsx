@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { normalizeUrl } from "@/lib/url";
 import { splitNdjson } from "@/lib/onboarding/stream";
 import type { AnalysisResult, AnalyzeEvent } from "@/types/onboarding";
 
@@ -20,7 +21,8 @@ export function UrlAnalyzer({
   const [running, setRunning] = useState(false);
 
   async function analyse() {
-    if (!url.trim()) return;
+    const target = normalizeUrl(url);
+    if (!target) return;
     setRunning(true);
     setLog([]);
     setError(null);
@@ -30,7 +32,7 @@ export function UrlAnalyzer({
       const res = await fetch("/api/admin/analyze-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: url.trim() }),
+        body: JSON.stringify({ url: target }),
       });
       if (!res.body) throw new Error("No response from the server.");
 
@@ -56,7 +58,7 @@ export function UrlAnalyzer({
             terminalSeen = true;
             setLog((l) => [...l, "Done — review the fields below."]);
             setAnalysis(event.result);
-            onResult(event.result, url.trim(), event.logoUrl);
+            onResult(event.result, target, event.logoUrl);
           }
         }
       }
@@ -95,10 +97,13 @@ export function UrlAnalyzer({
 
       <div className="mt-3 flex gap-2">
         <input
-          type="url"
+          type="text"
+          inputMode="url"
+          autoComplete="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://example.com"
+          onBlur={(e) => setUrl(normalizeUrl(e.target.value))}
+          placeholder="example.com"
           disabled={running}
           className="w-full rounded-lg border bg-surface px-3 py-2.5 text-sm"
           style={{ borderColor: "var(--color-hairline)" }}

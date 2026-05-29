@@ -1,5 +1,6 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getAdminCategories, getAllTags } from "@/lib/data/admin";
+import { normalizeUrl } from "@/lib/url";
 import { crawlSite } from "@/lib/onboarding/crawl";
 import { analyzeSite } from "@/lib/onboarding/analyze";
 import type { AnalyzeEvent } from "@/types/onboarding";
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as { url?: unknown };
     if (typeof body.url !== "string") throw new Error();
-    const parsed = new URL(body.url);
+    const parsed = new URL(normalizeUrl(body.url));
     if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
       throw new Error();
     }

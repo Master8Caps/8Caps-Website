@@ -9,6 +9,7 @@ import type {
   Tag,
 } from "@/types/domain";
 import { slugify } from "@/lib/slugify";
+import { normalizeUrl } from "@/lib/url";
 import { useUpload } from "@/lib/use-upload";
 import { ServicesEditor } from "./ServicesEditor";
 import { ScreenshotsEditor } from "./ScreenshotsEditor";
@@ -154,10 +155,13 @@ export function SiteForm({
         />
         <input
           required
-          type="url"
+          type="text"
+          inputMode="url"
+          autoComplete="url"
           value={values.url}
           onChange={(e) => set("url", e.target.value)}
-          placeholder="https://example.com"
+          onBlur={(e) => set("url", normalizeUrl(e.target.value))}
+          placeholder="example.com"
           className={field}
           style={fieldStyle}
         />

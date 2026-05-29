@@ -34,9 +34,18 @@ describe("siteFormSchema", () => {
     ).toBe(false);
   });
 
-  it("rejects a non-URL url", () => {
+  it("accepts a bare domain and normalises it to https://", () => {
+    const result = siteFormSchema.safeParse({
+      ...validSite,
+      url: "example.com",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.url).toBe("https://example.com");
+  });
+
+  it("rejects an unsalvageable url", () => {
     expect(
-      siteFormSchema.safeParse({ ...validSite, url: "not-a-url" }).success,
+      siteFormSchema.safeParse({ ...validSite, url: "https://" }).success,
     ).toBe(false);
   });
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeUrl } from "./url";
 
 const serviceSchema = z.object({
   name: z.string().min(1, "Service name is required"),
@@ -16,7 +17,10 @@ export const siteFormSchema = z.object({
     .string()
     .min(1, "Slug is required")
     .regex(/^[a-z0-9-]+$/, "Slug may only contain lowercase letters, numbers and hyphens"),
-  url: z.string().url("Must be a valid URL"),
+  url: z.preprocess(
+    (v) => (typeof v === "string" ? normalizeUrl(v) : v),
+    z.string().url("Must be a valid URL"),
+  ),
   logoUrl: z.string().url().nullable(),
   shortSummary: z.string().min(1, "Short summary is required"),
   fullOverview: z.string(),
